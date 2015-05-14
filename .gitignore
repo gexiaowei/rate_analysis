@@ -1,6 +1,8 @@
 # Created by .ignore support plugin (hsz.mobi)
+backup
 bower_components
 node_modules
 demo
 json
-test
+secret.json
+**/dist

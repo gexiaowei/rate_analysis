@@ -48,9 +48,8 @@ Analysis.prototype.request = function (type, extra, callback) {
             break;
         default:
             throw new Error('no such [type]' + type);
-            break;
     }
-    new $.galhttprequset(rateUrl + path, params, {
+    new $.httpRequest(rateUrl + path, params, {
         success: function (data) {
             callback(data);
         },

@@ -15,6 +15,10 @@
   "author": "Vivian (gandxiaowei@gmail.com)",
   "license": "MIT",
   "dependencies": {
+    "grunt-contrib-jshint": "latest",
+    "grunt-contrib-clean": "latest",
+    "grunt-contrib-cssmin": "latest",
+    "grunt-contrib-uglify": "latest",
     "grunt-ssh": "latest"
   }
 }

@@ -85,9 +85,9 @@ define("chart", ["d3"], function (d3) {
                     var i = d3.interpolate(this._current, d);
                     return function (t) {
                         return arc(i(t));
-                    }
+                    };
                 });
-        }
+        };
     }
 
     /**
@@ -158,9 +158,9 @@ define("chart", ["d3"], function (d3) {
                             c = option.format(c);
                         }
                         this.textContent = c;
-                    }
-                })
-        }
+                    };
+                });
+        };
     }
 
     /**
@@ -225,9 +225,9 @@ define("chart", ["d3"], function (d3) {
                     var i = d3.interpolateNumber(this._current, d);
                     return function (t) {
                         this.textContent = ((i(t)).toFixed(0) + '%');
-                    }
+                    };
                 });
-        }
+        };
     }
 
     /**
@@ -361,9 +361,9 @@ define("chart", ["d3"], function (d3) {
                 .tween('text', function (d) {
                     var startNum = parseInt(this.textContent, 10);
                     return function (t) {
-                        this.textContent = (startNum + (d - startNum) * t).toFixed(0) + '天'
+                        this.textContent = (startNum + (d - startNum) * t).toFixed(0) + '天';
                     };
-                })
+                });
         };
 
         if (option.dataset) {
@@ -470,7 +470,7 @@ define("chart", ["d3"], function (d3) {
                 .attr('height', function (d) {
                     return yScale(0) - yScale(d.data);
                 });
-        }
+        };
 
     }
 
@@ -559,7 +559,7 @@ define("chart", ["d3"], function (d3) {
                     var i = d3.interpolateRound(1, data.length);
                     return function (t) {
                         return obj.cal(data.slice(0, i(t)));
-                    }
+                    };
                 });
         };
 
@@ -678,7 +678,7 @@ define("chart", ["d3"], function (d3) {
                     var i = d3.interpolateRound(1, data.length);
                     return function (t) {
                         return obj.cal(data.slice(0, i(t)));
-                    }
+                    };
                 });
         };
 
@@ -712,7 +712,7 @@ define("chart", ["d3"], function (d3) {
             animateObjs.forEach(function (d) {
                 doAnimate(d);
             });
-        }
+        };
     }
 
     /**
@@ -758,10 +758,10 @@ define("chart", ["d3"], function (d3) {
 
         var line = d3.svg.line().interpolate('step-before')
             .x(function (d) {
-                return d.x
+                return d.x;
             })
             .y(function (d) {
-                return d.y
+                return d.y;
             });
 
         var points = [];
@@ -827,7 +827,7 @@ define("chart", ["d3"], function (d3) {
                     case 2:
                         return color[2];
                     default :
-                        return '#000'
+                        return '#000';
                 }
             });
 
@@ -873,7 +873,7 @@ define("chart", ["d3"], function (d3) {
                     var inter = d3.interpolate(arcs[i].startAngle()(), Math.pow(-1, (i)) * π / 2);
                     return function (t) {
                         return arcs[i].endAngle(inter(t))();
-                    }
+                    };
                 });
 
             profit.data(data).transition()
@@ -884,7 +884,7 @@ define("chart", ["d3"], function (d3) {
                         this.textContent = ('￥' + i(t).toFixed(0));
                     };
                 });
-        }
+        };
     }
 
     /**

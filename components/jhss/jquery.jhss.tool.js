@@ -1,124 +1,3 @@
-/*!
- * jQuery Cookie Plugin v1.4.1
- * https://github.com/carhartl/jquery-cookie
- *
- * Copyright 2013 Klaus Hartl
- * Released under the MIT license
- */
-(function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD
-        define(['jquery'], factory);
-    } else if (typeof exports === 'object') {
-        // CommonJS
-        factory(require('jquery'));
-    } else {
-        // Browser globals
-        factory(jQuery);
-    }
-}(function ($) {
-
-    var pluses = /\+/g;
-
-    function encode(s) {
-        return config.raw ? s : encodeURIComponent(s);
-    }
-
-    function decode(s) {
-        return config.raw ? s : decodeURIComponent(s);
-    }
-
-    function stringifyCookieValue(value) {
-        return encode(config.json ? JSON.stringify(value) : String(value));
-    }
-
-    function parseCookieValue(s) {
-        if (s.indexOf('"') === 0) {
-            // This is a quoted cookie as according to RFC2068, unescape...
-            s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
-        }
-
-        try {
-            // Replace server-side written pluses with spaces.
-            // If we can't decode the cookie, ignore it, it's unusable.
-            // If we can't parse the cookie, ignore it, it's unusable.
-            s = decodeURIComponent(s.replace(pluses, ' '));
-            return config.json ? JSON.parse(s) : s;
-        } catch (e) {
-        }
-    }
-
-    function read(s, converter) {
-        var value = config.raw ? s : parseCookieValue(s);
-        return $.isFunction(converter) ? converter(value) : value;
-    }
-
-    var config = $.cookie = function (key, value, options) {
-
-        // Write
-
-        if (value !== undefined && !$.isFunction(value)) {
-            options = $.extend({}, config.defaults, options);
-
-            if (typeof options.expires === 'number') {
-                var days = options.expires,
-                    t = options.expires = new Date();
-                t.setTime(+t + days * 864e+5);
-            }
-
-            return (document.cookie = [
-                encode(key), '=', stringifyCookieValue(value),
-                options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
-                options.path ? '; path=' + options.path : '',
-                options.domain ? '; domain=' + options.domain : '',
-                options.secure ? '; secure' : ''
-            ].join(''));
-        }
-
-        // Read
-
-        var result = key ? undefined : {};
-
-        // To prevent the for loop in the first place assign an empty array
-        // in case there are no cookies at all. Also prevents odd result when
-        // calling $.cookie().
-        var cookies = document.cookie ? document.cookie.split('; ') : [];
-
-        for (var i = 0, l = cookies.length; i < l; i++) {
-            var parts = cookies[i].split('=');
-            var name = decode(parts.shift());
-            var cookie = parts.join('=');
-
-            if (key && key === name) {
-                // If second argument (value) is a function it's a converter...
-                result = read(cookie, value);
-                break;
-            }
-
-            // Prevent storing a cookie that we couldn't decode.
-            if (!key && (cookie = read(cookie)) !== undefined) {
-                result[name] = cookie;
-            }
-        }
-
-        return result;
-    };
-
-    config.defaults = {};
-
-    $.removeCookie = function (key, options) {
-        if ($.cookie(key) === undefined) {
-            return false;
-        }
-
-        // Must not alter options, thus extending a fresh object...
-        $.cookie(key, '', $.extend({}, options, {
-            expires: -1
-        }));
-        return !$.cookie(key);
-    };
-
-}));
 /**
  * JHSS 工具库
  * Created by Vivian on 14/11/21.
@@ -133,14 +12,14 @@
      * @param {Object} callback 回调地址
      * @constructor
      */
-    function GalHttprequest(url, params, callback) {
+    function HttpRequest(url, params, callback) {
         this.url = url;
         this.params = params;
         this.data = params.data;
         this.callback = callback;
     }
 
-    GalHttprequest.prototype = {
+    HttpRequest.prototype = {
         getRequestUrl: function () {
             var keys = this.url.match(/{\w+}/g),
                 url_temp = this.url,
@@ -224,7 +103,7 @@
                         try {
                             packet.decode();
                         } catch (error) {
-                            console.error(error)
+                            console.error(error);
                             callback.error({
                                 status: "-0002",
                                 message: '数据异常'
@@ -336,7 +215,7 @@
                 ak: userInfo.ak,
                 userid: userInfo.userid,
                 sessionid: userInfo.sessionid
-            }
+            };
         } else {
             return {
                 ak: '0170010010000',
@@ -568,13 +447,15 @@
             var names = [];
             table.rows = [];
             var fieldCount = this.getInt();
-            for (var i = 0; i < fieldCount; i++) {
+            var i;
+            for (i = 0; i < fieldCount; i++) {
                 var field = this.decodeField();
                 table.field.push(field);
                 names.push(field.name);
             }
             var rowCount = this.getInt();
-            for (var i = 0; i < rowCount; i++) {
+
+            for (i = 0; i < rowCount; i++) {
                 table.rows.push(this.decodeRow(table.field));
             }
             return table;
@@ -622,7 +503,7 @@
                         if (len > this.buff.length) {
                             throw new Error('数据异常');
                         }
-                        row[name] = getStringFromByteArrs(this.get(len))
+                        row[name] = getStringFromByteArrs(this.get(len));
                         break;
                     case 'C':
                         row[name] = this.getChar();
@@ -719,12 +600,12 @@
             var ind = 0;
             do {
                 b = this.buff.shift();
-                if (ind == 0 && (b & 0x40) != 0) {
+                if (ind === 0 && (b & 0x40) !== 0) {
                     val = 0xffffffff;
                 }
                 ind++;
                 val = (val << 7) | (b & 0x7f);
-            } while ((b & 0x80) == 0);
+            } while ((b & 0x80) === 0);
             return val;
         },
         getCompressLong: function () {
@@ -734,7 +615,7 @@
             var ind = 0;
             do {
                 b = this.buff.shift();
-                if (ind == 0 && (b & 0x40) != 0) {
+                if (ind === 0 && (b & 0x40) !== 0) {
                     val_low = 0xffffffff;
                     val_high = 0xffffffff;
                 }
@@ -742,7 +623,7 @@
                 val_high = (val_high << 7) | (val_low >>> (32 - 7));
                 val_low = (val_low << 7) | (b & 0x7f);
             }
-            while ((b & 0x80) == 0);
+            while ((b & 0x80) === 0);
             return val_high * Math.pow(1 << 16, 2) + (val_low < 0 ? Math.pow(1 << 16, 2) : 0) + val_low;
         },
         getFloat: function () {
@@ -788,69 +669,13 @@
     };
 
     /**
-     * 获取本地存储对象
-     * @param {String} key
-     */
-    function localData(key) {
-        this.key = key;
-    }
-
-    localData.prototype = {
-        /**
-         * 获取对应key的值
-         * @returns {Object|String}
-         */
-        get: function () {
-            var value;
-            try {
-                localStorage.setItem('test', '1');
-                localStorage.remove('test');
-                value = localStorage.getItem(this.key);
-            } catch (e) {
-                value = $.cookie(this.key);
-            }
-            try {
-                return JSON.parse(value);
-            } catch (e) {
-                return value;
-            }
-        },
-        /**
-         * 设置对应key的值
-         * @param {Object|String} value
-         */
-        set: function (value) {
-            if (typeof value === 'object') {
-                value = JSON.stringify(value);
-            }
-            try {
-                localStorage.setItem(this.key, value);
-            } catch (e) {
-                $.cookie(this.key, value);
-            }
-        },
-        /**
-         * 移除对应key的值
-         */
-        remove: function () {
-            try {
-                localStorage.setItem('test', '1');
-                localStorage.remove('test');
-                localStorage.remove(this.key);
-            } catch (e) {
-                $.removeCookie(this.key);
-            }
-        }
-    };
-
-    /**
      * 格式化代码
      * @param {Number} num 大数据
      * @returns {String}
      */
     function BigNumberFormat(num) {
-        var num = num.toFixed(2),
-            unit = '',
+        num = num.toFixed(2);
+        var unit = '',
             absnum = Math.abs(num);
         if (absnum < 10000) {
             num = num.toFixed(0);
@@ -868,34 +693,12 @@
     }
 
     /**
-     * 格式化排名
-     * @param   {String|Number} rank
-     * @returns {String}
-     */
-    function FormatRank(rank) {
-        if (typeof rank === 'string') {//把字符转换成数字
-            rank = parseInt(rank);
-        }
-        var rankStr;
-        if (rank == 0) {
-            rankStr = "";
-        } else if (rank > 99999 && rank <= 999999) {
-            rankStr = (Math.floor(rank / 10000)).toFixed(0) + "万+";
-        } else if (rank > 999999) {
-            rankStr = "100万+";
-        } else {
-            rankStr = rank.toFixed(0);//toFixed只能用于数字
-        }
-        return rankStr;
-    }
-
-    /**
      * 从地址栏中获取参数
      * @returns {Object}
      */
     function getParamsFromUrl() {
         var paramstr = window.location.search,
-            params = new Object();
+            params = {};
         if (paramstr) {
             $(paramstr.substr(1).split('&')).each(function (i, item) {
                 var kv = item.split('='),
@@ -934,53 +737,16 @@
         }
     }
 
-    var phoneUtils = function () {
-        return {
-            isValidate: function (phone) {
-                var reg = new RegExp('^((13[0-9])|(14[^4,\\D])|(15[^4,\\D])|(18[0-9])|(17[0678]))\\d{8}$');
-                return reg.test(phone);
-            },
-            isVerifyCode:function(verifycode){
-                var reg = new RegExp(/\d{6}/);
-                return reg.test(verifycode);
-            }
-        }
-    };
-
     $.extend({
-        galhttprequset: function (url, params, callback) {
-            return new GalHttprequest(url, params, callback);
-        },
-        packet: function (operatecode, seq) {
-            return new Packet(operatecode, seq);
+        httpRequest: function (url, params, callback) {
+            return new HttpRequest(url, params, callback);
         },
         base64: function () {
             return new Base64();
         },
-        localData: function (key) {
-            return new localData(key)
-        },
         getUserInfo: getUserInfo,
-        formatRank: FormatRank,
         bigNumberFormat: BigNumberFormat,
-        getParams: getParamsFromUrl,
-        phoneUtils: phoneUtils()
+        getParams: getParamsFromUrl
     });
-
-    Date.prototype.Format = function (fmt) { //author: meizz
-        var o = {
-            "M+": this.getMonth() + 1, //月份
-            "d+": this.getDate(), //日
-            "h+": this.getHours(), //小时
-            "m+": this.getMinutes(), //分
-            "s+": this.getSeconds(), //秒
-            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-            "S": this.getMilliseconds() //毫秒
-        };
-        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o)
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-        return fmt;
-    }
 })
 (jQuery, window);

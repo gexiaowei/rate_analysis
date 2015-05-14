@@ -4,7 +4,6 @@
  * @time 2015-03-02
  * Copyright 2015 by gandxiaowei@gmail.com
  */
-;
 (function ($, window, document) {
     'use strict';
 

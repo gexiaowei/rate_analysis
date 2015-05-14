@@ -4,7 +4,6 @@
  * @version 1.0.0
  * CopyRight 2014-2015, Gandxiaowei@gmail.com.All Rights Reserved.
  */
-;
 var analysis = new Analysis({});
 var fragments = [
     'home.html',
@@ -41,8 +40,8 @@ var callbacks = [
                 reqnum: 250, pflag: -1
             }, function (data) {
                 var result = data.result;
-                assetLine.line(result.reverse(), 'profit_ana')
-            })
+                assetLine.line(result.reverse(), 'profit_ana');
+            });
         };
         $('#select ul li').click(function () {
             if ($(this).hasClass('checked')) {
@@ -79,7 +78,7 @@ $(function () {
 function requestAnalysis(swiper) {
     var index = swiper.activeIndex;
     var page = $('#page' + index);
-    if (page.children().length == 0) {
+    if (page.children().length === 0) {
         page.load('fragment/' + fragments[index], callbacks[index]);
     }
 }
