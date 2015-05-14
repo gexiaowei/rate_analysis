@@ -1,0 +1,20 @@
+{
+  "name": "user_rate_analysis",
+  "version": "1.0.0",
+  "description": "charts for user rate analysis",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "chart"
+  ],
+  "author": "Vivian (gandxiaowei@gmail.com)",
+  "license": "MIT",
+  "dependencies": {
+    "grunt-ssh": "latest"
+  }
+}

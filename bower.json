@@ -1,0 +1,20 @@
+{
+  "name": "wap_rate",
+  "version": "1.0.0",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "idangerous-swiper": "latest",
+    "jquery.svg": "latest",
+    "d3": "latest",
+    "requirejs": "latest",
+    "jquery": "1.11.x"
+  }
+}

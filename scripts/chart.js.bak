@@ -1,0 +1,593 @@
+/**
+ * requestAnimationFrame和cancelAnimationFrame，兼容android 4.3以下
+ */
+(function () {
+    var lastTime = 0;
+    var vendors = ['webkit', 'moz'];
+    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || // name has changed in Webkit
+        window[vendors[x] + 'CancelRequestAnimationFrame'];
+    }
+
+    if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = function (callback) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
+            var id = window.setTimeout(function () {
+                callback(currTime + timeToCall);
+            }, timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+    }
+    if (!window.cancelAnimationFrame) {
+        window.cancelAnimationFrame = function (id) {
+            clearTimeout(id);
+        };
+    }
+})();
+
+/**
+ *扩展$.anmation方法
+ */
+(function ($) {
+    $.animate = function (from, to, callback, duration) {
+        var step = (to - from) / duration;
+        var key = from;
+        var time = new Date().getTime();
+
+        function run() {
+            var current = new Date().getTime();
+            key += (step * (current - time));
+            time = current;
+            if (key > to) {
+                key = to;
+            }
+            callback(key);
+            if (key != to) {
+                window.requestAnimationFrame(run);
+            }
+        }
+
+        run();
+    }
+})(jQuery);
+
+/**
+ * 图表基类
+ * @param id svgDOM的ID
+ * @constructor
+ */
+function Chart(id) {
+    var $self = this,
+        ele = $('#' + id);
+    ele.svg({
+        onLoad: function (svg) {
+            $self.svg = svg;
+        }
+    })
+}
+
+
+/**
+ * 环形图
+ * @param id svgDOM的id
+ * @param option 环形图属性
+ * @constructor
+ */
+function AnnulusChart(id, option) {
+    Chart.call(this, id);
+    var $self = this,
+        ele = $('#' + id),
+        r = ele.parent().width() / 2;
+    ele.height(2 * r);
+    ele.width(2 * r);
+    $self.r = r;
+
+    $self.path = $self.svg.path(null, $self.getPath(0), {
+        stroke: option.color,
+        fill: 'transparent',
+        strokeWidth: 0.1 * r
+    });
+    $self.svg.circle(r, r, r * 0.7, {
+        fill: option.color
+    });
+    $self.text = $self.svg.text(null, r, r, '0', {
+        'text-anchor': 'middle',
+        'dominant-baseline': 'central',
+        fontSize: 20,
+        fill: '#ffffff'
+    });
+
+
+}
+
+/**
+ * 旋转环形
+ * @param percent 环形百分比
+ */
+AnnulusChart.prototype.to = function (percent) {
+    var $self = this;
+    $.animate(0, percent, function (val) {
+        $self.svg.change($self.path, {
+            d: $self.getPath(val).path()
+        });
+        $($self.text, $self.svg.root()).text((val * 10).toFixed(0));
+    }, 1000);
+};
+
+/**
+ * 获取路径
+ * @param percent 获取某个百分比的路径
+ * @returns {string}
+ */
+AnnulusChart.prototype.getPath = function (percent) {
+    var r = this.r,
+        path = this.svg.createPath(),
+        needClose = false;
+    if (percent >= 1) {
+        percent = 0.99;
+        needClose = true;
+    }
+    var opt = {
+        x1: r,
+        y1: r + this.r * 0.9,
+        rx: r * 0.9,
+        ry: r * 0.9,
+        rotation: 360 * percent,
+        flag: percent >= 0.5 ? 1 : 0,
+        sweep: 1,
+        x: r * (1 + Math.cos(-0.5 * Math.PI - 2 * percent * Math.PI) * 0.9),
+        y: r * (1 - Math.sin(-0.5 * Math.PI - 2 * percent * Math.PI) * 0.9)
+    };
+    path.move(opt.x1, opt.y1).arc(opt.rx, opt.ry, opt.rotation, opt.flag, opt.sweep, opt.x, opt.y);
+    if (needClose) {
+        path.close();
+    }
+    return path;
+};
+
+/**
+ * 折线图
+ * @param id svgDOM的id
+ * @param option 折线图属性
+ * @constructor
+ */
+function AssetLine(id, option) {
+    Chart.call(this, id);
+    this.inital(id, this.svg);
+}
+
+AssetLine.prototype.inital = function (id, svg) {
+    var select = $('#' + id),
+        canvas_height = select.parent().height() * 0.8,
+        canvas_width = select.parent().width();
+    select.height(canvas_height);
+    select.width(canvas_width);
+    this.canvas_width = canvas_width;
+    var top = canvas_height * 0.1,
+    //		left = canvas_width * 0.15,
+        left = canvas_width * 0.05,
+        bottom = 0,
+        container_width = canvas_width - 2 * left,
+        container_height = canvas_height - top;
+    this.left = left;
+    this.container_width = container_width;
+    var scales_asset = [],
+        scales_index = [],
+        scales_dates = [];
+    var i = 0;
+    var legend_index_text = svg.text(left + container_width, canvas_height - 2, '上证指数', {
+            fill: '#FF8931',
+            'text-anchor': 'end',
+            'font-size': 13
+        }),
+        legend_index_rect = svg.rect(getX(legend_index_text) - 25, canvas_height - $(legend_index_text).height() * 5 / 6, 20, $(legend_index_text).height() * 2 / 3, {
+            fill: 'rgba(207,144,0,0.2)',
+        }),
+        legend_asset_text = svg.text(getX(legend_index_text) - 45, canvas_height - 2, '资金曲线', {
+            fill: '#FF8931',
+            'text-anchor': 'end',
+            'font-size': 13
+        }),
+        legend_asset_rect = svg.rect(getX(legend_asset_text) - 25, canvas_height - $(legend_asset_text).height() * 5 / 6, 20, $(legend_asset_text).height() * 2 / 3, {
+            fill: '#FF9641',
+        });
+
+    container_height -= $(legend_index_text).height() * 1.4;
+    var anchor = 'start';
+    for (i = 0; i < 3; i++) {
+        if (i === 0) {
+            anchor = 'start';
+        } else if (i === 1) {
+            anchor = 'middle';
+        } else {
+            anchor = 'end'
+        }
+        var scale_date = svg.text(left + container_width * i / 2, top + container_height, new Date().Format('yy-MM-dd'), {
+            fill: '#FF8931',
+            'text-anchor': anchor,
+            'font-size': 13
+        });
+        bottom = $(scale_date).height();
+        scales_dates.push(scale_date);
+    }
+
+    container_height -= bottom * 1.4;
+    for (i = 0; i < 2; i++) {
+        svg.line(left, top + container_height * (i + 1) / 3, left + container_width, top + container_height * (i + 1) / 3, {
+            stroke: 'rgba(194,194,194,0.5)'
+        });
+    }
+
+    for (i = 0; i < 3; i++) {
+        var scale_asset = svg.text(left - 10, top + container_height * i / 3, 3 - i + '', {
+            fill: '#FF8931',
+            'dominant-baseline': 'middle',
+            'font-size': 12
+        });
+        scales_asset.push(scale_asset);
+        var scale_index = svg.text(left + container_width + 10, top + container_height * i / 3, 3 - i + '', {
+            fill: '#FF8931',
+            'text-anchor': 'end',
+            'dominant-baseline': 'middle',
+            'font-size': 12
+        });
+        scales_index.push(scale_index);
+    }
+
+    var line_index = svg.polyline([[left, top + container_height], [left + container_width, top + container_height]], {});
+    svg.change(line_index, {
+        stroke: 'rgba(207,144,0,0.2)',
+        strokeWidth: '2',
+        fill: 'transparent'
+    });
+    var path_index = svg.polyline([[left, top + container_height], [left + container_width, top + container_height]], {});
+    svg.change(path_index, {
+        id: 'b',
+        fill: 'rgba(255,173,0,0.3)'
+    });
+
+    console.log(line_index);
+    var line_asset = $.clone(line_index)[0];
+    svg.change(line_asset, {
+        stroke: '#FF9641',
+        fill: 'transparent'
+    });
+
+    console.log(path_index);
+    var path_asset = $.clone(path_index)[0];
+    svg.change(path_asset, {
+        fill: 'rgba(253,137,24 ,0.4)'
+    });
+    this._group_index = {
+        line: line_index,
+        path: path_index
+    };
+    this._group_asset = {
+        line: line_asset,
+        path: path_asset
+    };
+    this._cirlcegroup = svg.group();
+    this._scales_asset = scales_asset;
+    this._scales_index = scales_index;
+    this._scales_date = scales_dates;
+    this._point_start = new Point(left, top + container_height);
+    this._point_end = new Point(left + container_width, top + container_height);
+    this._opt = {
+        top: top,
+        left: left,
+        dataHeight: container_height,
+        dataWidth: container_width
+    };
+    this.addPoint = function (x, y) {
+        svg.circle(this._cirlcegroup, x, y, Math.min(0.015 * canvas_width, 10), {
+            fill: '#fff',
+            stroke: '#FF9641',
+            strokeWidth: 2
+        });
+    };
+    this.reset();
+};
+
+/**
+ * 重置界面
+ */
+AssetLine.prototype.reset = function () {
+    var emptystr = this._point_start.toString(0, 1) + ',' + this._point_end.toString(0, 1);
+    this.svg.change(
+        this._group_asset.line, {
+            points: emptystr
+        });
+    this.svg.change(this._group_asset.path, {
+        points: emptystr
+    });
+    this.svg.change(this._group_index.line, {
+        points: emptystr
+    });
+    this.svg.change(this._group_index.path, {
+        points: emptystr
+    });
+};
+
+AssetLine.prototype.clearCirlce = function () {
+    if (this.animateProcess) {
+        clearInterval(this.animateProcess);
+        this.animateProcess = null;
+    }
+    if (this._cirlcegroup) {
+        $(this._cirlcegroup).find('circle').remove();
+        $(this._cirlcegroup).find('text').remove();
+    }
+    this.animationId = this.animationId ? this.animationId + 1 : 1;
+};
+
+/**
+ * 对数据进行连线
+ * @param {Array} result 数据点
+ */
+AssetLine.prototype.line = function (result, type) {
+
+    this.clearCirlce();
+    var i = 0;
+    var temp_assets = [],
+        temp_indexs = [],
+        points_asset = [],
+        points_index = [];
+    for (i = 0; i < result.length; i++) {
+        temp_assets.push(result[i].asset);
+        temp_indexs.push(result[i].index);
+    }
+    temp_assets.sort(function (a, b) {
+        return parseFloat(a) > parseFloat(b) ? 1 : -1;
+    });
+    temp_indexs.sort(function (a, b) {
+        return parseFloat(a) > parseFloat(b) ? 1 : -1;
+    });
+
+    var max_asset = temp_assets[temp_assets.length - 1],
+        max_index = temp_indexs[temp_indexs.length - 1],
+        min_asset = temp_assets[0],
+        min_index = temp_indexs[0];
+    if (temp_assets.length === 2) {
+        max_index = max_index * 1.1;
+    }
+    var interval_asset = max_asset - min_asset,
+        interval_index = max_index - min_index,
+        index = {
+            min_asset: 0,
+            max_asset: 0,
+            min_index: 0,
+            max_index: 0
+        };
+    for (i = 0; i < result.length; i++) {
+        if (max_asset == result[i].asset) {
+            index.max_asset = i;
+        }
+        if (min_asset == result[i].asset) {
+            index.min_asset = i;
+        }
+        if (max_index == result[i].index) {
+            index.max_index = i;
+        }
+        if (min_index == result[i].index) {
+            index.min_index = i;
+        }
+    }
+
+    console.log(index);
+
+    for (i = 1; i < 3; i++) {
+        this.svg.change(this._scales_date[i], {
+            display: 'block'
+        });
+    }
+    if (result.length < 3) {
+        this.svg.change(this._scales_date[1], {
+            display: 'none'
+        });
+        this.svg.change(this._scales_date[2], {
+            display: 'none'
+        });
+    } else if (result.length < 5) {
+        this.svg.change(this._scales_date[2], {
+            display: 'none'
+        });
+    }
+    for (i = 0; i < 3; i++) {
+        $(this._scales_asset[i], this.svg.root()).text(new formatBigNum(max_asset - interval_asset * i / 3).toString());
+        $(this._scales_index[i], this.svg.root()).text(new formatBigNum(max_index - interval_index * i / 3).toString());
+        $(this._scales_date[i], this.svg.root()).text(result[Math.floor((result.length - 1) * i / 2)].date);
+    }
+
+    var max_point = null,
+        min_point = null;
+
+    for (i = 0; i < result.length; i++) {
+        var x = this._opt.left + this._opt.dataWidth * i / Math.max(result.length - 1, 6);
+        var point_asset_temp = new Point(x, this._opt.top + this._opt.dataHeight * (interval_asset === 0 ? 1 : (max_asset - result[i].asset) / interval_asset)),
+            point_index_temp = new Point(x, this._opt.top + this._opt.dataHeight * (interval_index === 0 ? 1 : (max_index - result[i].index) / interval_index));
+        points_asset.push(point_asset_temp);
+        points_index.push(point_index_temp);
+        if (!max_point && max_asset === result[i].asset) {
+            max_point = point_asset_temp;
+        }
+        if (!min_point && min_asset === result[i].asset) {
+            min_point = point_asset_temp;
+        }
+    }
+    var animationId = this.animationId;
+    var self = this;
+    $.animate(0, 1, function (val) {
+        var temp_str_asset = [],
+            temp_str_index = [];
+        var point_end = self._point_end;
+        for (i = 0; i < result.length; i++) {
+            temp_str_asset.push(points_asset[i].x + ',' + (self._opt.dataHeight * (1 - val) + points_asset[i].y * val));
+            temp_str_index.push(points_index[i].x + ',' + (self._opt.dataHeight * (1 - val) + points_index[i].y * val));
+            point_end.x = points_asset[i].x;
+        }
+        var str_asset = temp_str_asset.join(),
+            str_index = temp_str_index.join();
+
+        self.svg.change(self._group_asset.line, {
+            points: str_asset ? str_asset : self._point_start.toString(0, 1) + ',' + point_end.toString(0, 1)
+        });
+        self.svg.change(self._group_asset.path, {
+            points: self._point_start.toString(0, 1) + ',' + (str_asset ? str_asset + ',' : '') + point_end.toString(0, 1)
+        });
+
+        self.svg.change(self._group_index.line, {
+            points: str_index ? str_index : self._point_start.toString(0, 1) + ',' + point_end.toString(0, 1)
+        });
+        self.svg.change(self._group_index.path, {
+            points: self._point_start.toString(0, 1) + ',' + (str_index ? str_index + ',' : '') + point_end.toString(0, 1)
+        });
+    }, 1000, function () {
+        if (animationId !== self.animationId) {
+            return;
+        }
+        if (result.length < 11) {
+            for (i = 0; i < points_asset.length; i++) {
+                self.addPoint(points_asset[i].x, points_asset[i].y);
+            }
+        }
+        if (result.length > 2) {
+            self.animateMaxandMin(max_point, min_point);
+        }
+
+        if (type === 'daily_asset_line') {
+            console.log('draw max and min value');
+            var limitValue = [];
+            limitValue[0] = self.svg.text(self._cirlcegroup, points_asset[index.max_asset].x, points_asset[index.max_asset].y + 25, new formatBigNum(max_asset).toString(), {
+                fill: '#FF9641',
+                'font-size': 12,
+                'text-anchor': 'middle'
+            }),
+                limitValue[1] = self.svg.text(self._cirlcegroup, points_asset[index.min_asset].x, points_asset[index.min_asset].y - 15, new formatBigNum(min_asset).toString(), {
+                    fill: '#FF9641',
+                    'font-size': 12,
+                    'text-anchor': 'middle'
+                }),
+                limitValue[2] = self.svg.text(self._cirlcegroup, points_index[index.max_index].x, points_index[index.max_index].y, new formatBigNum(max_index).toString(), {
+                    fill: 'rgba(207,144,0,0.5)',
+                    'font-size': 12,
+                    'text-anchor': 'middle'
+                }),
+                limitValue[3] = self.svg.text(self._cirlcegroup, points_index[index.min_index].x, points_index[index.min_index].y, new formatBigNum(min_index).toString(), {
+                    fill: 'rgba(207,144,0,0.5)',
+                    'font-size': 12,
+                    'text-anchor': 'middle'
+                });
+
+            for (var m = 0; m < limitValue.length; m++) {
+                var temp_x = getX(limitValue[m], 2);
+                if (temp_x < self.left) {
+                    self.svg.change(limitValue[m], {
+                        transform: 'translate(' + (self.left - temp_x) + ',0)'
+                    });
+                }
+
+                if (temp_x + $(limitValue[m]).width() > self.left + self.container_width) {
+                    self.svg.change(limitValue[m], {
+                        transform: 'translate(' + (self.left + self.container_width - (temp_x + $(limitValue[m]).width())) + ',0)'
+                    });
+                }
+
+            }
+        }
+
+    });
+};
+
+AssetLine.prototype.animateMaxandMin = function (points_max, point_min) {
+    this.mincirlce = this.svg.circle(this._cirlcegroup, point_min.x, point_min.y, Math.min(0.015 * this.canvas_width, 10), {
+        fill: '#00951F'
+    });
+
+    this.transformmin = this.svg.circle(this._cirlcegroup, point_min.x, point_min.y, Math.min(0.015 * this.canvas_width + 3, 12), {
+        strokeWidth: 1,
+        fill: 'transparent',
+        stroke: '#00951F'
+    });
+
+    var maxcirlce = this.svg.circle(this._cirlcegroup, points_max.x, points_max.y, Math.min(0.015 * this.canvas_width, 10), {
+        fill: '#F0081A'
+    });
+
+    this.transformmax = this.svg.circle(this._cirlcegroup, points_max.x, points_max.y, Math.min(0.015 * this.canvas_width + 3, 12), {
+        strokeWidth: 1,
+        fill: 'transparent',
+        stroke: '#F0081A'
+    });
+
+    this.startAnimation();
+
+};
+
+AssetLine.prototype.startAnimation = function (callback) {
+    if (!this.transformmax || !this.transformmin) {
+        return;
+    }
+    var self = this;
+    self.animate();
+    this.animateProcess = setInterval(function () {
+        self.animate();
+    }, 3000);
+};
+
+AssetLine.prototype.animate = function () {
+    var self = this;
+    $.animate(1, -1, function (val) {
+        if (val >= 0) {
+            self.svg.change(self.transformmax, {
+                r: Math.min(0.015 * self.canvas_width + 2, 12) + 3 * (1 - val)
+            });
+            self.svg.change(self.transformmin, {
+                r: Math.min(0.015 * self.canvas_width + 2, 12) + 3 * (1 - val)
+            });
+        } else {
+            self.svg.change(self.transformmax, {
+                r: Math.min(0.015 * self.canvas_width + 2, 12) + 3 * (1 + val)
+            });
+            self.svg.change(self.transformmin, {
+                r: Math.min(0.015 * self.canvas_width + 2, 12) + 3 * (1 + val)
+            });
+        }
+    }, 3000);
+};
+
+function getX(el, num) {
+    if (el.getBBox) {
+        return el.getBBox().x;
+    }
+    num = num || 1;
+    var parent = $(el),
+        i;
+    for (i = 0; i < num; i++) {
+        parent = parent.parent();
+    }
+    return $(el).offset().left - parent.offset().left;
+}
+
+/**
+ * 点
+ * @param {Number} x x轴坐标
+ * @param {Number} y y轴坐标
+ */
+function Point(x, y) {
+    this.x = x;
+    this.y = y;
+}
+
+/**
+ * 转化点为字符串
+ * @param   {Number} top     顶部高度
+ * @param   {Number} percent 百分比
+ * @returns {String} 字符串
+ */
+Point.prototype.toString = function (top, percent) {
+    var postion_y = top + this.y * percent;
+    return this.x + ',' + postion_y;
+};

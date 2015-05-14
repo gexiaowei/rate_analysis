@@ -1,0 +1,440 @@
+.main {
+    width: 100%;
+    overflow-x: hidden;
+    height: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    position: relative;
+    background: #FFFFFF;
+    display: block;
+}
+
+.header {
+    width: 100%;
+    height: 31%;
+    clear: both;
+    background: url(../images/bg.jpg) center bottom no-repeat;
+    background-color: #01a1ff;
+    background-size: 100% auto;
+}
+
+.header div {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    height: auto;
+    color: #fff;
+    clear: both;
+}
+
+.header div.hlogion {
+    width: 30%;
+    float: left;
+    margin-top: 8px;
+    margin-left: 10px;
+    margin-bottom: 4px;
+}
+
+.header div.hlogion img {
+    width: 100%;
+}
+
+.header div p.l {
+    display: block;
+    font: bold 28px/10px "微软雅黑";
+    padding-top: 5px;
+}
+
+.header div p.c {
+    display: block;
+    font: 14px/15px Constantia, "Lucida Bright", "DejaVu Serif", Georgia, serif;
+    padding-top: 10px;
+}
+
+.header div p.r {
+    display: block;
+    font: 0.6em/0.6em "微软雅黑";
+    padding-top: 10px;
+    text-align: right;
+    padding-right: 18%;
+}
+
+.conicot {
+    width: 100%;
+    background: #ffffff;
+    margin: 0 auto;
+    clear: both;
+    padding: 0;
+}
+
+.conicon {
+    width: 60%;
+    margin: 0 auto;
+    text-align: center;
+    padding-left: 22px;
+}
+
+.concen {
+    display: block;
+    width: 100%;
+    clear: both;
+    margin: 0 auto;
+    text-align: center;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+.concen span p.w {
+    color: #ff8d83;
+}
+
+.concen span p.w1 {
+    color: #49bcff;
+}
+
+.concen span p.w2 {
+    color: #aa82ff;
+}
+
+.concen span {
+    width: 30%;
+    padding-left: 2%;
+    float: left;
+}
+
+.concen span p {
+    display: block;
+    clear: both;
+    font: 0.8em/1.2em "微软雅黑";
+}
+
+.concen span div {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.footer {
+    display: block;
+    width: 100%;
+    background: #eeeeee;
+    clear: both;
+    overflow: hidden;
+    position: absolute;
+    bottom: 0px;
+    padding-bottom: 10px;
+    line-height: 21px;
+}
+
+.footer span {
+    float: left;
+}
+
+.footer span.s1 {
+    width: 60%;
+}
+
+.footer span.s2 {
+    width: 40%;
+}
+
+.footer span p {
+    font: 1em/1em "微软雅黑";
+    color: #a1a1a1;
+    text-align: left;
+    padding-left: 1px;
+    margin-top: 6px;
+}
+
+.footer span p.over {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-left: 10px;
+}
+
+.footer span p b {
+    color: #01a1ff;
+    font-weight: 400;
+}
+
+.top_next {
+    height: 20px;
+    color: #00A7FB;
+    clear: both;
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    text-align: center;
+    background: #ffffff;
+
+}
+
+.next {
+    display: none;
+}
+
+/*CSS3判断响应式布局*/
+
+/*宽度320的样式*/
+
+@media all and (min-width: 320px) {
+    .header {
+        height: 36%;
+
+    }
+
+    .concer {
+        display: block;
+        width: 100%;
+        padding: 8px 0px 7px 0px;
+    }
+
+    .concer {
+        background: url(../images/bg_level.png) center 0px no-repeat;
+        background-size: 100% auto;
+    }
+
+    .concer img {
+        width: 59%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-right: 5%;
+    }
+}
+
+@media all and (min-width: 360px) {
+    .header {
+        height: 39%;
+    }
+
+    .header div p.l {
+        display: block;
+        font: bold 38px/15px "微软雅黑";
+        padding-top: 8px;
+    }
+
+    .header div p.c {
+        display: block;
+        font: 17px/35px Constantia, "Lucida Bright", "DejaVu Serif", Georgia, serif;
+        padding-top: 5px;
+    }
+
+    .header div p.r {
+        display: block;
+        font: 0.8em/0.2em "微软雅黑";
+        padding-top: 3px;
+        text-align: right;
+        padding-right: 12%;
+    }
+
+    .concer {
+        display: block;
+        width: 100%;
+        background-color: red;
+        padding: 8px 0px 7px 0px;
+    }
+
+    .concer {
+        background: url(../images/bg_level.png) no-repeat center;
+        background-size: 98% auto;
+    }
+
+    .concer img {
+        width: 60%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-right: 4%;
+    }
+}
+
+@media all and (min-width: 375px) {
+    .header {
+        height: 39%;
+    }
+
+    .header div p.l {
+        display: block;
+        font: bold 40px/15px "微软雅黑";
+        padding-top: 8px;
+    }
+
+    .header div p.c {
+        display: block;
+        font: 20px/35px Constantia, "Lucida Bright", "DejaVu Serif", Georgia, serif;
+        padding-top: 10px;
+    }
+
+    .header div p.r {
+        display: block;
+        font: 0.2em/0.2em "微软雅黑";
+        padding-top: 10px;
+        text-align: right;
+        padding-right: 10%;
+    }
+
+    .concer {
+        display: block;
+        width: 100%;
+        background-color: red;
+        padding: 8px 0px 7px 0px;
+    }
+
+    .concer {
+        height: 155px;
+        background: url(../images/bg_level.png) no-repeat center;
+        background-size: 98% auto;
+    }
+
+    .concer img {
+        width: 60%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-right: 4%;
+    }
+}
+
+@media all and (min-width: 384px) {
+    .header {
+        height: 36%;
+    }
+
+    .header div p.l {
+        display: block;
+        font: bold 40px/15px "微软雅黑";
+        padding-top: 8px;
+    }
+
+    .header div p.c {
+        display: block;
+        font: 20px/35px Constantia, "Lucida Bright", "DejaVu Serif", Georgia, serif;
+        padding-top: 10px;
+    }
+
+    .header div p.r {
+        display: block;
+        font: 0.2em/0.2em "微软雅黑";
+        padding-top: 10px;
+        text-align: right;
+        padding-right: 12%;
+    }
+
+    .concer {
+        display: block;
+        width: 100%;
+        background-color: red;
+        padding: 8px 0px 7px 0px;
+    }
+
+    .concer {
+        background: url(../images/bg_level.png) no-repeat center;
+        background-size: 98% auto;
+    }
+
+    .concer img {
+        width: 60%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-right: 4%;
+    }
+}
+
+@media all and (min-width: 400px) {
+    .header {
+        height: 38%;
+    }
+
+    .header div p.l {
+        display: block;
+        font: bold 40px/15px "微软雅黑";
+        padding-top: 8px;
+    }
+
+    .header div p.c {
+        display: block;
+        font: 20px/35px Constantia, "Lucida Bright", "DejaVu Serif", Georgia, serif;
+        padding-top: 10px;
+    }
+
+    .header div p.r {
+        display: block;
+        font: 0.8em/0.2em "微软雅黑";
+        padding-top: 10px;
+        text-align: right;
+        padding-right: 20%;
+    }
+
+    .concer {
+        display: block;
+        width: 100%;
+        background-color: red;
+        padding: 8px 0px 7px 0px;
+    }
+
+    .concer {
+        background: url(../images/bg_level.png) no-repeat center;
+        background-size: 97% auto;
+    }
+
+    .concer img {
+        width: 60%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-right: 4%;
+    }
+}
+
+.animateimg {
+    -webkit-animation-name: fadeIn;
+    /*动画名称*/
+    -webkit-animation-duration: 2s;
+    /*动画持续时间*/
+    -webkit-animation-iteration-count: 1;
+    /*动画次数*/
+    -webkit-animation-delay: 0s;
+    /*延迟时间*/
+}
+
+@-webkit-keyframes fadeIn {
+    0% {
+        -webkit-transform: scale(2, 2);
+        transform: scale(2, 2);
+        opacity: 0;
+    }
+    100% {
+        -webkit-transform: scale(1, 1);
+        transform: scale(1, 1);
+        opacity: 1;
+    }
+}
+
+.animatetip {
+    height: 100%;
+    width: 15px;
+    vertical-align: middle;
+    -webkit-animation-name: revolving;
+    /*动画名称*/
+    -webkit-animation-duration: 1s;
+    /*动画持续时间*/
+    -webkit-animation-iteration-count: infinite;
+    /*动画次数*/
+    -webkit-animation-timing-function: linear;
+}
+
+@-webkit-keyframes revolving {
+    0% {
+        -webkit-transform: translate(0px, -2px);
+    }
+    25% {
+        -webkit-transform: translate(0px, -7px);
+    }
+    50% {
+        -webkit-transform: translate(0px, -2px);
+    }
+    75% {
+        -webkit-transform: translate(0px, 3px);
+    }
+    100% {
+        -webkit-transform: translate(0px, -2px);
+    }
+}
