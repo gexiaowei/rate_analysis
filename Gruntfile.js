@@ -47,7 +47,13 @@ module.exports = function (grunt) {
                     sourceMap: true
                 },
                 files: {
-                    'components/dist/jquery.jhss.min.js': ['components/**/*.js', '!components/dist/*.js']
+                    'components/dist/jquery.jhss.min.js': [
+                        'components/jhss/jquery.jhss.tool.js',
+                        'components/jhss/jquery.jhss.chart.js',
+                        'components/jhss/jquery.jhss.analysis.js',
+                        'components/jhss/jquery.jhss.page.js',
+                        'components/wechat/jquery.wechat.js '
+                    ]
                 }
             }
         },

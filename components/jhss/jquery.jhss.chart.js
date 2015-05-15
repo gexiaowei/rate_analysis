@@ -1,11 +1,10 @@
 /**
- * chart.js
+ * jquery.jhss.chart
  * @author Vivian
  * @version 1.0.0
- * CopyRight 2014-2015, Gandxiaowei@gmail.com All Rights Reserved.
+ * copyright 2014-2015, gandxiaowei@gmail.com. all rights reserved.
  */
-define("chart", ["d3"], function (d3) {
-
+(function ($, d3) {
     'use strict';
 
     var JHSSChart = {
@@ -957,7 +956,5 @@ define("chart", ["d3"], function (d3) {
 
     JHSSChart.ProfitAvgChart = ProfitAvgChart;
 
-    return JHSSChart;
-});
-
-//@ sourceMappingURL=chart.min.map
+    $.chart = JHSSChart;
+})(jQuery, d3);

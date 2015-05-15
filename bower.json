@@ -12,9 +12,7 @@
   ],
   "dependencies": {
     "idangerous-swiper": "latest",
-    "jquery.svg": "latest",
     "d3": "latest",
-    "requirejs": "latest",
     "jquery": "1.11.x"
   }
 }
