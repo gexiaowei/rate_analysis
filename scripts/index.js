@@ -8,13 +8,13 @@ var analysis = new Analysis({});
 var fragments = [
     'home.html',
     'profit_ana.html',
-    'profitability_analysis_asset_fluctuation.html',
-    'profitability_analysis_annual_profit.html',
-    'daily_trading_analysis_profit_loss_total.html',
-    'daily_trading_analysis_profit_loss_avg.html',
-    'daily_trading_analysis_position_stat.html',
-    'stock_selection_analysis_success_rate.html',
-    'stock_selection_analysis_stock_selection.html',
+    'asset_fluctuation.html',
+    'annual_profit.html',
+    'loss_total.html',
+    'loss_avg.html',
+    'position_stat.html',
+    'success_rate.html',
+    'stock_selection.html',
     'share.html'
 ];
 

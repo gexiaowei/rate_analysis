@@ -26,7 +26,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         clean: {
-            all: ['components/dist/', 'scripts/dist', 'styles/dist']
+            all: ['components/dist/', 'scripts/dist', 'styles/analysis.css']
         },
         jshint: {
             all: ['components/**/*.js', '!components/dist/*.js', 'scripts/*.js']
@@ -52,7 +52,7 @@ module.exports = function (grunt) {
             }
         },
         cssmin: {
-            'styles/dist/analysis.css': ['styles/*.css']
+            'styles/analysis.css': ['styles/*.css', '!styles/analysis.css']
         }
     });
 
