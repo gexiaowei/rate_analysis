@@ -6,8 +6,9 @@
  */
 (function ($) {
     'use strict';
-    var params = $.getParams(),
-        urlBase = !!(params || params.debug) ? '119.253.36.116' : 'mncg.youguu.com',
+
+    var urlParams = $.getParams(),
+        urlBase = !!(urlParams || urlParams.debug) ? '119.253.36.116' : 'mncg.youguu.com',
         urlRate = 'http://' + urlBase + '/youguu/rating';
 
     /**
@@ -16,6 +17,7 @@
      * @constructor
      */
     function Analysis(option) {
+        this.params = $.getParams();
         this.option = option;
     }
 
@@ -25,13 +27,13 @@
     Analysis.prototype.request = function () {
         var type = this.option.type,
             extra = this.option.extra,
+            params = this.params,
             callback = this.option.callback;
         var path = '';
         if (typeof extra == 'function') {
             callback = extra;
         } else {
-            $.extend(extra, params);
-            params = extra;
+            params = $.extend(params, extra);
         }
 
         switch (type) {
@@ -53,6 +55,8 @@
             default:
                 throw new Error('no such type: ' + type);
         }
+        console.log('请求路径', path);
+        console.log('请求参数', params);
         $.httpRequest(urlRate + path, params, {
             success: function (data) {
                 callback(data);

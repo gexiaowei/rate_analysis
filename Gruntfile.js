@@ -33,6 +33,9 @@ module.exports = function (grunt) {
         },
         uglify: {
             all: {
+                options: {
+                    sourceMap: true
+                },
                 files: [{
                     expand: true,
                     cwd: 'scripts/',
@@ -66,6 +69,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-ssh');
 
     grunt.registerTask('build', ['jshint', 'clean', 'uglify', 'cssmin']);
