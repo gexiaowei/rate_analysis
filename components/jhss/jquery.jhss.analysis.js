@@ -8,7 +8,7 @@
     'use strict';
 
     var urlParams = $.getParams(),
-        urlBase = !!(urlParams || urlParams.debug) ? '119.253.36.116' : 'mncg.youguu.com',
+        urlBase = !!(urlParams && urlParams.debug) ? '119.253.36.116' : 'mncg.youguu.com',
         urlRate = 'http://' + urlBase + '/youguu/rating';
 
     /**
@@ -41,16 +41,16 @@
                 path = '/score?userid={userid}&matchid={matchid}';
                 break;
             case 'daily_asset_line':
-                path = '/daily_asset_line??userid={userid}&matchid={matchid}&reqnum={reqnum}&pflag={pflag}';
+                path = '/daily_asset_line?userid={userid}&matchid={matchid}&reqnum={reqnum}&pflag={pflag}';
                 break;
             case 'week_asset_line':
                 path = '/week_asset_line?userid={userid}&matchid={matchid}&reqnum={reqnum}&pflag={pflag}';
                 break;
             case 'month_asset_line':
-                path = '/week_asset_line?userid={userid}&matchid={matchid}&reqnum={reqnum}&pflag={pflag}';
+                path = '/month_asset_line?userid={userid}&matchid={matchid}&reqnum={reqnum}&pflag={pflag}';
                 break;
             case 'profit_ana':
-                path = 'profit_ana?userid={userid}&matchid={matchid}';
+                path = '/profit_ana?userid={userid}&matchid={matchid}';
                 break;
             default:
                 throw new Error('no such type: ' + type);

@@ -673,7 +673,7 @@
      * @param {Number} num 大数据
      * @returns {String}
      */
-    function BigNumberFormat(num) {
+    function formatNum(num) {
         num = num.toFixed(2);
         var unit = '',
             absnum = Math.abs(num);
@@ -689,7 +689,10 @@
             num = (num / 100000000000).toFixed(2);
             unit = '千亿';
         }
-        return num + unit;
+        return {
+            val: num,
+            unit: unit
+        };
     }
 
     /**
@@ -737,6 +740,7 @@
         }
     }
 
+
     $.extend({
         httpRequest: function (url, params, callback) {
             return new HttpRequest(url, params, callback);
@@ -745,7 +749,7 @@
             return new Base64();
         },
         getUserInfo: getUserInfo,
-        bigNumberFormat: BigNumberFormat,
+        formatNum: formatNum,
         getParams: getParamsFromUrl
     });
 })

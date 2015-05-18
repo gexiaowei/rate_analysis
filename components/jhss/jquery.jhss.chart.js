@@ -622,7 +622,7 @@
      * @param dataset
      */
     ProfitLineChart.prototype.setData = function (dataset) {
-        this.animate(dataset);
+        this.animate(dataset.slice(0));
     };
 
     JHSSChart.ProfitLineChart = ProfitLineChart;
