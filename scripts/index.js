@@ -43,6 +43,7 @@ function initPages() {
     //加载page页
     pages.push(getHomePage());
     pages.push(getProfitAnaPage());
+    pages.push(getAssetFluctuationPage());
 
     return pages;
 }
@@ -77,7 +78,6 @@ function getHomePage() {
 
     function load(data) {
         var result = data.result;
-        console.log(result);
         charts[0].setData(result.profitability * 20);
         charts[1].setData(result.stability * 20);
         charts[2].setData(result.accuracy * 20);
@@ -99,7 +99,7 @@ function getHomePage() {
     return page;
 }
 
-/**
+/**get
  * 首页曲线page
  */
 function getProfitAnaPage() {
@@ -120,7 +120,10 @@ function getProfitAnaPage() {
                     reqnum: 250,
                     pflag: -1
                 },
-                callback: load
+                callback: function (data) {
+                    cache.daily_asset_line = data.result;
+                    load(data.result);
+                }
             })
         ]
     });
@@ -158,7 +161,6 @@ function getProfitAnaPage() {
     }
 
     function display(data) {
-        console.log(data);
         var result = data.result;
         var totalassets = $.formatNum(result.totalAssets);
         $('#totalassets').text(totalassets.val);
@@ -177,8 +179,52 @@ function getProfitAnaPage() {
     }
 
     function load(result) {
-        console.log(result);
         chart.setData(result);
+    }
+
+    return page;
+}
+
+function getAssetFluctuationPage() {
+    //TODO 未设定刻度
+    var chart;
+    var page = $.page({
+        fragment: 'fragment/asset_fluctuation.html',
+        container: '#page2',
+        init: init,
+        analysis: [
+            $.analysis({
+                type: 'asset_fluctuation',
+                callback: display
+            }),
+            $.analysis({
+                type: 'daily_backval_line',
+                extra: {
+                    reqnum: 250,
+                    pflag: -1
+                },
+                callback: load
+            })
+        ]
+    });
+
+    function init() {
+        chart = new $.chart.BackAssetCLineChart('#backvalchart');
+    }
+
+    function display(data) {
+        console.log(data);
+        var result = data.result;
+        $('#avgbackdays').text(result.avgBackDays);
+        $('#backrate').text((result.backRate * 100).toFixed(2));
+        $('#highrate').text((result.highRate * 100).toFixed(2));
+        $('#maxbackrate').text((result.maxBackRate * 100).toFixed(2) + '%');
+        $('#maxbackval').text('￥' + result.maxBackVal.toFixed(0));
+        $('#fluctuate_remark').text(result.remark);
+    }
+
+    function load(data) {
+        chart.setData(data.result);
     }
 
     return page;

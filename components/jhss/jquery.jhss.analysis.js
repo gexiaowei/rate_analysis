@@ -49,8 +49,14 @@
             case 'month_asset_line':
                 path = '/month_asset_line?userid={userid}&matchid={matchid}&reqnum={reqnum}&pflag={pflag}';
                 break;
+            case 'daily_backval_line':
+                path = '/daily_backval_line?userid={userid}&matchid={matchid}&reqnum={reqnum}&pflag={pflag}';
+                break;
             case 'profit_ana':
                 path = '/profit_ana?userid={userid}&matchid={matchid}';
+                break;
+            case 'asset_fluctuation':
+                path = '/asset_fluctuation?userid={userid}&matchid={matchid}';
                 break;
             default:
                 throw new Error('no such type: ' + type);

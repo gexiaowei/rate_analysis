@@ -1,0 +1,84 @@
+div.statisticstop {
+	margin-top: 4.296875%;
+	height: auto;
+	color: #2DB2F9;
+	overflow:hidden;
+}
+div.statisticstop div {
+	height: 100%;
+	width: 45.555555555556%;
+	margin-left: 3.6111111111111%;
+	float: left;
+	background-color: #C7ECFE;
+	vertical-align: middle;
+	padding:3px 0px;
+}
+div.statisticstop div:nth-child(2) {
+	margin-left: 1.8055555555556%;
+}
+div.statisticstop div span {
+	display: block;
+	text-align: center;
+	font-size: 1.1em;
+
+}
+div.statisticstop div span:nth-child(2) {
+	font-size:16px; line-height:23px;font-family:"微软雅黑";
+
+}
+div.backvalchart {
+	height: 39.7%;
+	width: 100%;
+	padding-top: 5%;
+	padding-bottom: 5%;
+	box-sizing: border-box;
+	clear:both;
+	margin:2% 0%;
+}
+div.statisticsbottom {
+	height: auto;
+	margin-bottom: 10px;
+	padding-left: 1.6666666666667%;
+	box-sizing: border-box;
+	clear:both;
+	overflow:hidden;
+}
+div.statisticsbottom div {
+	background-color: #FFF0E4;
+	width: 30%;
+	height: 100%;
+	margin-left: 2.0833333333333%;
+	float: left;
+	color: #FF8932;
+}
+div.statisticsbottom div span {
+	display: block;
+	font-size: 0.8em;
+	margin-top: 0.4em;
+	text-align: center;
+}
+div.statisticsbottom div span b {
+	font-size: 1.2em;
+}
+div.statisticsbottom div span:nth-child(2) {
+	margin-top: 0.1em;
+	font-size: 1em;
+}
+div.declare span {
+	font-size: 0.93em;
+}
+@media all and (min-width: 320px) {
+	
+	div.statisticstop div span { font-size:16px; line-height:23px;font-family:"微软雅黑";}
+	div.statisticsbottom div {padding:8px 0px;}
+	
+}
+@media all and (min-width: 360px) {
+	div.statisticstop div span { font-size:18px; line-height:29px;font-family:"微软雅黑";}
+	div.profitana div span {
+		line-height:25px;
+	}
+	div.profitana div { padding-top:10px;}
+	nav span {line-height:65px;}
+	div.statisticsbottom {margin-bottom: 22px;}
+}

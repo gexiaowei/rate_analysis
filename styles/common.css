@@ -21,6 +21,7 @@ ol, ul {
 a {
     text-decoration: none;
 }
+
 html,
 body {
     padding: 0;
@@ -28,11 +29,13 @@ body {
     width: 100%;
     max-width: 540px;
     margin: 0 auto;
-    overflow-x:hidden;
+    overflow-x: hidden;
 }
+
 body {
     font-family: Arial, Helvetica, sans-serif;
 }
+
 nav {
     background-color: #00A2FB;
     color: #FFFFFF;
@@ -41,25 +44,29 @@ nav {
     height: 9.84375%;
     line-height: 2em;
     text-align: left;
-    padding-left:10px;
-    display:table;
+    padding-left: 10px;
+    display: table;
 
 }
+
 nav span {
     background-color: #00A2FB;
     color: #FFFFFF;
     font-size: 1.1em;
     height: 100%;
-    display:table-cell;
-    vertical-align:middle;
+    display: table-cell;
+    vertical-align: middle;
 }
-.sortnum{ font-weight:bold; font-size:21px;}
+
+.sortnum {
+    font-weight: bold;
+    font-size: 21px;
+}
+
 span.title {
     margin-left: 10px;
-    font-weight:bold;
-
+    font-weight: bold;
 }
-
 
 div.splitline {
     background: #DDDDDD;
@@ -67,6 +74,7 @@ div.splitline {
     width: 90%;
     margin-left: 5%;
 }
+
 div.declare {
     width: 92%;
     margin-left: 3.7%;
@@ -75,25 +83,29 @@ div.declare {
     margin-top: 10px;
     padding-bottom: 1%;
     box-sizing: border-box;
-    clear:both;
-    padding-left:4px;
-    font-family:"微软雅黑";
+    clear: both;
+    padding-left: 4px;
+    font-family: "微软雅黑";
 
 }
+
 div.declare span {
     display: block;
     font-size: 0.9em;
     padding-top: 3%;
     padding-bottom: 1%;
-    padding-left:5px;
-    padding-right:5px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
+
 .rise {
     color: #F3001A;
 }
+
 .fall {
     color: #00941F;
 }
+
 div.next {
     position: absolute;
     bottom: 0;
@@ -102,6 +114,7 @@ div.next {
     height: 25px;
     color: #00A7FB;
 }
+
 .animatetip {
     height: 100%;
     vertical-align: middle;
@@ -113,6 +126,7 @@ div.next {
     /*动画次数*/
     -webkit-animation-timing-function: linear;
 }
+
 @-webkit-keyframes revolving {
     0% {
         -webkit-transform: translate(0px, -2px);
@@ -130,12 +144,14 @@ div.next {
         -webkit-transform: translate(0px, -2px);
     }
 }
+
 #fountainTextG {
     position: absolute;
     top: 40%;
     left: 30%;
     text-align: center;
 }
+
 .fountainTextG {
     color: #00A2FF;
     font-family: Arial;
@@ -170,6 +186,7 @@ div.next {
     animation-direction: linear;
     transform: scale(.5);
 }
+
 #fountainTextG_1 {
     -moz-animation-delay: 0.64s;
     -webkit-animation-delay: 0.64s;
@@ -177,6 +194,7 @@ div.next {
     -o-animation-delay: 0.64s;
     animation-delay: 0.64s;
 }
+
 #fountainTextG_2 {
     -moz-animation-delay: 0.8s;
     -webkit-animation-delay: 0.8s;
@@ -184,6 +202,7 @@ div.next {
     -o-animation-delay: 0.8s;
     animation-delay: 0.8s;
 }
+
 #fountainTextG_3 {
     -moz-animation-delay: 0.96s;
     -webkit-animation-delay: 0.96s;
@@ -191,6 +210,7 @@ div.next {
     -o-animation-delay: 0.96s;
     animation-delay: 0.96s;
 }
+
 #fountainTextG_4 {
     -moz-animation-delay: 1.12s;
     -webkit-animation-delay: 1.12s;
@@ -198,6 +218,7 @@ div.next {
     -o-animation-delay: 1.12s;
     animation-delay: 1.12s;
 }
+
 #fountainTextG_5 {
     -moz-animation-delay: 1.28s;
     -webkit-animation-delay: 1.28s;
@@ -205,6 +226,7 @@ div.next {
     -o-animation-delay: 1.28s;
     animation-delay: 1.28s;
 }
+
 #fountainTextG_6 {
     -moz-animation-delay: 1.44s;
     -webkit-animation-delay: 1.44s;
@@ -212,6 +234,7 @@ div.next {
     -o-animation-delay: 1.44s;
     animation-delay: 1.44s;
 }
+
 #fountainTextG_7 {
     -moz-animation-delay: 1.6s;
     -webkit-animation-delay: 1.6s;
@@ -219,6 +242,7 @@ div.next {
     -o-animation-delay: 1.6s;
     animation-delay: 1.6s;
 }
+
 #fountainTextG_8 {
     -moz-animation-delay: 1.76s;
     -webkit-animation-delay: 1.76s;
@@ -227,12 +251,11 @@ div.next {
     animation-delay: 1.76s;
 }
 
-
 @media all and (min-width: 360px) {
-    nav {line-height: 58px;}
+    nav {
+        line-height: 58px;
+    }
 }
-
-
 
 @-moz-keyframes bounce_fountainTextG {
     0% {
@@ -244,6 +267,7 @@ div.next {
         color: #AFE2FF;
     }
 }
+
 @-webkit-keyframes bounce_fountainTextG {
     0% {
         -webkit-transform: scale(1);
@@ -254,6 +278,7 @@ div.next {
         color: #AFE2FF;
     }
 }
+
 @-ms-keyframes bounce_fountainTextG {
     0% {
         -ms-transform: scale(1);
@@ -264,6 +289,7 @@ div.next {
         color: #AFE2FF;
     }
 }
+
 @-o-keyframes bounce_fountainTextG {
     0% {
         -o-transform: scale(1);
@@ -274,6 +300,7 @@ div.next {
         color: #AFE2FF;
     }
 }
+
 @keyframes bounce_fountainTextG {
     0% {
         transform: scale(1);
