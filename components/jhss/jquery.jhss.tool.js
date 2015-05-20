@@ -25,8 +25,6 @@
                 url_temp = this.url,
                 params = this.params,
                 base64 = $.base64();
-            console.log(keys);
-            console.log(this.params);
             if (keys) {
                 $.each(keys, function (i, key) {
                     var data_temp = params[key.substr(1, key.length - 2)];
@@ -36,7 +34,6 @@
                     url_temp = url_temp.replace(key, base64.encode(data_temp));
                 });
             }
-            console.log('请求URL:' + url_temp);
             return url_temp;
         },
         /**
@@ -110,7 +107,6 @@
                             });
                         }
                         var info = packet.getValue();
-                        console.log(info);
                         if (info.status.status == '0000' || info.status[0].status == '0000') {
                             callback.success(info);
                         } else {
@@ -716,9 +712,7 @@
     function getUserInfo() {
         var ua = navigator.userAgent.toLowerCase();
         var info = ua.match(/jhss{1}(\/.+)+/g);
-        console.log(info);
         if (info) {
-            console.log(info);
             var infos = info[0].split('/');
             var userinfo = {
                 platform: infos[1] || 'unknown',
@@ -747,6 +741,9 @@
         },
         base64: function () {
             return new Base64();
+        },
+        packet: function (operatecode, seq) {
+            return new Packet(operatecode, seq);
         },
         getUserInfo: getUserInfo,
         formatNum: formatNum,

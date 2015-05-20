@@ -58,6 +58,18 @@
             case 'asset_fluctuation':
                 path = '/asset_fluctuation?userid={userid}&matchid={matchid}';
                 break;
+            case 'annual_profit':
+                path = '/annual_profit?userid={userid}&matchid={matchid}';
+                break;
+            case 'profit_loss_total':
+                path = '/profit_loss_total?userid={userid}&matchid={matchid}';
+                break;
+            case 'profit_loss_avg':
+                path = '/profit_loss_avg?userid={userid}&matchid={matchid}';
+                break;
+            case 'position_stat':
+                path = '/position_stat?userid={userid}&matchid={matchid}';
+                break;
             default:
                 throw new Error('no such type: ' + type);
         }

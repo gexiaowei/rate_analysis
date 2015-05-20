@@ -255,6 +255,18 @@ div.next {
     nav {
         line-height: 58px;
     }
+
+    div.profitana div span {
+        line-height: 25px;
+    }
+
+    div.profitana div {
+        padding-top: 10px;
+    }
+
+    nav span {
+        line-height: 65px;
+    }
 }
 
 @-moz-keyframes bounce_fountainTextG {

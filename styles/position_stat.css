@@ -1,0 +1,88 @@
+div.moneyuse {
+    color: #F84B43;
+    height: 15.625%;
+    text-align: center;
+    position: relative;
+}
+
+div.moneyuse span {
+    position: absolute;
+    display: block;
+    top: 50%;
+    height: 4em;
+    margin-top: -2em;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    line-height: 4em;
+}
+
+div.moneyuse span b {
+    margin-left: 2%;
+    font-size: 2em;
+    vertical-align: middle;
+}
+
+span#percent {
+    color: #ED4F48;
+    font-size: 2em;
+}
+
+div#position_stat_chart {
+    width: 100%;
+    height: 38.28125%;
+    padding: 0 4.167%;
+    box-sizing: border-box;
+}
+
+div.days {
+    margin-top: 4.6875%;
+    width: 100%;
+    padding-left: 4.027777777%;
+    margin-bottom: 3.515625%;
+    box-sizing: border-box;
+    clear: both;
+    overflow: hidden;
+}
+
+div.days div {
+    float: left;
+    background-color: #C7ECFE;
+    width: 45.555555555%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+    padding: 4px 0px;
+}
+
+div.days .days-value {
+    font-weight: bold;
+    font-size: 22px;
+}
+
+div.days div:nth-child(2) {
+    margin-left: 1.8055555555556%;
+}
+
+div.days div span {
+    color: #2C9DDC;
+    display: block;
+    font: 14px/23px "微软雅黑";
+}
+
+#position_stat_remark {
+    text-align: left;
+}
+
+@media all and (min-width: 360px) {
+    div.declare {
+        margin-top: 20px;
+    }
+
+    div.days div span {
+        color: #2C9DDC;
+        display: block;
+        font: 16px/23px "微软雅黑";
+    }
+}

@@ -44,6 +44,10 @@ function initPages() {
     pages.push(getHomePage());
     pages.push(getProfitAnaPage());
     pages.push(getAssetFluctuationPage());
+    pages.push(getAnnualProfitPage());
+    pages.push(getProfitLossTotalPage());
+    pages.push(getProfitLossAvgPage());
+    pages.push(getPositionStatPage());
 
     return pages;
 }
@@ -99,8 +103,8 @@ function getHomePage() {
     return page;
 }
 
-/**get
- * 首页曲线page
+/**
+ * 收益曲线page
  */
 function getProfitAnaPage() {
     var chart;
@@ -185,6 +189,9 @@ function getProfitAnaPage() {
     return page;
 }
 
+/**
+ * 回撤曲线page
+ */
 function getAssetFluctuationPage() {
     //TODO 未设定刻度
     var chart;
@@ -213,7 +220,6 @@ function getAssetFluctuationPage() {
     }
 
     function display(data) {
-        console.log(data);
         var result = data.result;
         $('#avgbackdays').text(result.avgBackDays);
         $('#backrate').text((result.backRate * 100).toFixed(2));
@@ -225,6 +231,146 @@ function getAssetFluctuationPage() {
 
     function load(data) {
         chart.setData(data.result);
+    }
+
+    return page;
+}
+
+/**
+ * 年化收益page
+ */
+function getAnnualProfitPage() {
+    //TODO 增加图例和数据
+    var beatChart, profitChart;
+    var page = $.page({
+        fragment: 'fragment/annual_profit.html',
+        container: '#page3',
+        init: init,
+        analysis: $.analysis({
+            type: 'annual_profit',
+            callback: load
+        })
+    });
+
+    function init() {
+        beatChart = new $.chart.BeatChart('#chart_beat', {
+            color: ['#FFBF68']
+        });
+        profitChart = new $.chart.ProfitChart('#chart_profit');
+    }
+
+    function load(data) {
+        var result = data.result;
+        console.log(result);
+        beatChart.setData(result.defeatRate * 100);
+        profitChart.setData([
+            result.annualProfit,
+            result.deposit1,
+            result.deposit5,
+            result.nationalDebt5,
+            result.bao,
+            result.bankFinancing,
+            result.cpi
+        ]);
+        $('#annual_remark').text(result.remark);
+    }
+
+    return page;
+}
+
+/**
+ * 盈亏天数page
+ */
+function getProfitLossTotalPage() {
+    //TODO 添加数据
+    var pieChart;
+    var page = $.page({
+        fragment: 'fragment/profit_loss_total.html',
+        container: '#page4',
+        init: init,
+        analysis: $.analysis({
+            type: 'profit_loss_total',
+            callback: load
+        })
+    });
+
+    function init() {
+        pieChart = new $.chart.PieChart('#loss_total_chart');
+    }
+
+    function load(data) {
+        var result = data.result;
+        console.log(result);
+        pieChart.setData([
+            result.flatDays,
+            result.lossDays,
+            result.profitDays
+        ]);
+        $('#loss_total_remark').text(result.remark);
+    }
+
+    return page;
+}
+
+function getProfitLossAvgPage() {
+    var page = $.page({
+        fragment: 'fragment/profit_loss_avg.html',
+        container: '#page5',
+        init: init,
+        analysis: $.analysis({
+            type: 'profit_loss_avg',
+            callback: load
+        })
+    });
+
+    function init() {
+
+    }
+
+    function load(data) {
+        var result = data.result;
+        console.log(result);
+
+        $('#loss_avg_remark').text(result.remark);
+    }
+
+    return page;
+}
+
+function getPositionStatPage() {
+    var distributionChart;
+    var page = $.page({
+        fragment: 'fragment/position_stat.html',
+        container: '#page6',
+        init: init,
+        analysis: $.analysis({
+            type: 'position_stat',
+            callback: load
+        })
+    });
+
+    function init() {
+        distributionChart = new $.chart.DistributionChart('#position_stat_chart');
+    }
+
+    function load(data) {
+        var result = data.result;
+        distributionChart.setData([
+            result.p1,
+            result.p15,
+            result.p30,
+            result.p50,
+            result.p75,
+            result.p90
+        ]);
+        display(result);
+    }
+
+    function display(result) {
+        $('#percent').text((result.avgPositionRate * 100).toFixed(0) + '%');
+        $('#fulldays').text(result.full);
+        $('#emptydays').text(result.empty);
+        $('#position_stat_remark').text(result.remark);
     }
 
     return page;

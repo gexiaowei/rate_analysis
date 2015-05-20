@@ -1,0 +1,27 @@
+div#chart_beat {
+    height: 43%;
+    width: 100%;
+}
+
+div#chart_profit {
+    height: 32%;
+    width: 100%;
+}
+
+#annual_remark {
+    text-align: left;
+}
+
+@media all and (min-width: 360px) {
+    div.profitana div span {
+        line-height: 25px;
+    }
+
+    div.profitana div {
+        padding-top: 10px;
+    }
+
+    nav span {
+        line-height: 55px;
+    }
+}

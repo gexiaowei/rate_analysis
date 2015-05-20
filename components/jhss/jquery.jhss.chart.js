@@ -41,7 +41,10 @@
         var edge = this.edge;
 
         if (!option) {
-            option = {};
+            option = {
+                outer: 0.3,
+                inner: 0.2
+            };
         }
         var color = option.color || ['#FFC06B', '#6CE6B2', '#FF6C65'];
 
@@ -251,8 +254,12 @@
         var svg = this.svg;
         var size = this.size;
 
+        if (!option) {
+            option = {};
+        }
+
         var distribution = option.distribution || ['0%-15%', '15%-30%', '30%-50%', '50%-75%', '75%-90%', '90%-100%'];
-        var color = option.color || ['#D6ADEE', '#C2EFFD', '#73E7DD', '#A0E179', '#FFC471', '#FF9A9C'];
+        var color = option.color || ['#D6ADEE', '#4EC3F9', '#73E7DD', '#A0E179', '#FFC471', '#FF9A9C'];
         var dataset = [];
         for (var i = 0; i < distribution.length; i++) {
             dataset.push(0);
@@ -394,7 +401,7 @@
         }
         var svg = this.svg;
         var color = option.color || ['#FF9A9C', '#FFCD87', '#FFAD7F', '#A0E179', '#73E7DD', '#92D8F9', '#D6ADEE'];
-        var label = option.label || ['我的年化收益', '1年定存', '2年定存', '5年国债', '宝类', '银行理财', 'CPI'];
+        var label = option.label || ['我的年化收益', '1年定存', '5年定存', '5年国债', '宝类', '银行理财', 'CPI'];
 
         this.bindData = function (data) {
             var dataObjs = [];

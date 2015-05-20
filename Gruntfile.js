@@ -62,6 +62,12 @@ module.exports = function (grunt) {
         },
         cssmin: {
             'styles/analysis.css': ['styles/*.css', '!styles/analysis.css']
+        },
+        watch: {
+            build: {
+                files: ['components/**', '!components/dist/**', 'styles/*.css', '!styles/analysis.css'],
+                tasks: ['build']
+            }
         }
     });
 
@@ -69,6 +75,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-ssh');
 

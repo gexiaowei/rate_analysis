@@ -1,0 +1,14 @@
+div#loss_avg_chart {
+    height: 34.765625%;
+    width: 100%;
+}
+
+div#loss_avg_chart_avg {
+    height: 39.453125%;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+#loss_avg_remark {
+    text-align: left;
+}
