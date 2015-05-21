@@ -963,5 +963,123 @@
 
     JHSSChart.ProfitAvgChart = ProfitAvgChart;
 
+    /**
+     * 仪表盘
+     * @param containerNode
+     * @param option
+     * @constructor
+     */
+    function DashChart(containerNode, option) {
+        BaseChart.call(this, containerNode);
+        option = option || {};
+
+        var colors = ['#732928', '#FFBAB8', '#FFA6A4', '#E14949', '#F96360'];
+        //['#2B6299', '#81D4F9', '#7FD5F9', '#2C6297', '#00A4F8'],
+        //['#8E4D17', '#FFD8B7', '#FFC08E', '#D27327', '#FF8E32']
+
+
+        var angleStart = -120,
+            angleEnd = 120;
+
+        var svg = this.svg,
+            width = this.size.width,
+            height = this.size.height,
+            edge = this.edge;
+
+        var scale = d3.scale.linear()
+            .domain([0, 100])
+            .range([angleStart, angleEnd]);
+
+        var scaleData = d3.range(101);
+
+        var scalesGroup = svg.append('g')
+            .attr('transform', $.format('translate({0}, {1})', width / 2, 0));
+
+        var scales = scalesGroup
+            .selectAll('g')
+            .data(scaleData)
+            .enter()
+            .append('g')
+            .attr('transform', function (d) {
+                return $.format('rotate({0}, {1}, {2})', scale(d), 0, height / 2);
+            });
+
+        scales.append('line')
+            .attr('x1', 0)
+            .attr('y1', function (d) {
+                return d % 10 === 0 ? 0 : 2;
+            })
+            .attr('x2', 0)
+            .attr('y2', function (d) {
+                return d % 10 === 0 ? 16 : 14;
+            })
+            .attr('stroke-width', function (d) {
+                return d % 10 === 0 ? 3 : 1;
+            })
+            .attr('stroke', function (d) {
+                return d % 10 === 0 ? colors[0] : colors[1];
+            });
+
+        scales.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('x', 0)
+            .attr('y', 30)
+            .attr('font-size', 12)
+            .attr('fill', colors[0])
+            .text(function (d) {
+                return d % 10 === 0 ? d : '';
+            });
+
+        var pointContainer = svg.append('g')
+            .attr('transform', $.format('translate({0}, {1})', width / 2, 0));
+
+        pointContainer.append('circle')
+            .attr('cx', 0)
+            .attr('cy', height / 2)
+            .attr('r', edge * 0.18)
+            .attr('fill', colors[2]);
+
+        var pointer = pointContainer.append('polygon')
+            .attr('points', [-3, height / 2, 3, height / 2, 0, edge / 2 - edge * 0.38].join())
+            .attr('fill', colors[3])
+            .attr('transform', $.format('rotate({0}, {1}, {2})', scale(0), 0, height / 2));
+
+        pointContainer.append('circle')
+            .attr('cx', 0)
+            .attr('cy', height / 2)
+            .attr('r', edge * 0.13)
+            .attr('fill', colors[4]);
+
+        pointContainer.append('text')
+            .attr('x', 0)
+            .attr('y', height / 2)
+            .attr('fill', '#fff')
+            .attr('text-anchor', 'middle')
+            .attr('dominant-baseline', 'middle')
+            .attr('font-size', edge * 0.08)
+            .text('0%');
+
+        this.animate = function (dataset) {
+            var startTransform = pointer.attr('transform'),
+                endTransform = $.format('rotate({0}, {1}, {2})', scale(dataset), 0, height / 2);
+            pointer.transition()
+                .duration(JHSSChart.duration)
+                .attrTween("transform", function () {
+                    return d3.interpolateString(startTransform, endTransform);
+                });
+
+        };
+    }
+
+    /**
+     * 设置数据
+     * @param dataset
+     */
+    DashChart.prototype.setData = function (dataset) {
+        this.animate(dataset);
+    };
+
+    JHSSChart.DashChart = DashChart;
+
     $.chart = JHSSChart;
 })(jQuery, d3);

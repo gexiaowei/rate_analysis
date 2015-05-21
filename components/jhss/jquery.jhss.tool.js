@@ -664,6 +664,32 @@
         }
     };
 
+    function format(source, params) {
+        if (arguments.length === 1)
+            return function () {
+                var args = $.makeArray(arguments);
+                args.unshift(source);
+                return $.format.apply(this, args);
+            };
+        if (arguments.length > 2 && params.constructor !== Array) {
+            params = $.makeArray(arguments).slice(1);
+        }
+        if (params.constructor === Object) {
+            var item;
+            for (item in params) {
+                source = source.replace(new RegExp("\\{" + item + "\\}", "g"), params[item]);
+            }
+            return source;
+        }
+        if (params.constructor !== Array) {
+            params = [params];
+        }
+        $.each(params, function (i, n) {
+            source = source.replace(new RegExp("\\{" + i + "\\}", "g"), n);
+        });
+        return source;
+    }
+
     /**
      * 格式化代码
      * @param {Number} num 大数据
@@ -747,6 +773,7 @@
         },
         getUserInfo: getUserInfo,
         formatNum: formatNum,
+        format: format,
         getParams: getParamsFromUrl
     });
 })
