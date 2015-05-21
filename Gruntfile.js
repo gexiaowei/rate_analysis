@@ -68,6 +68,34 @@ module.exports = function (grunt) {
                 files: ['components/**', '!components/dist/**', 'styles/*.css', '!styles/analysis.css'],
                 tasks: ['build']
             }
+        },
+        sftp: {
+            product: {
+                files: {
+                    "./": publishFiles
+                },
+                options: {
+                    path: '<%= secret.product.path %>/<%= pkg.name %>/',
+                    host: '<%= secret.product.host %>',
+                    username: '<%= secret.product.username %>',
+                    password: '<%= secret.product.password %>',
+                    showProgress: true,
+                    createDirectories: true
+                }
+            },
+            test: {
+                files: {
+                    "./": publishFiles
+                },
+                options: {
+                    path: '<%= secret.test.path %>/<%= pkg.name %>/',
+                    host: '<%= secret.test.host %>',
+                    username: '<%= secret.test.username %>',
+                    password: '<%= secret.test.password %>',
+                    showProgress: true,
+                    createDirectories: true
+                }
+            }
         }
     });
 
@@ -80,4 +108,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-ssh');
 
     grunt.registerTask('build', ['jshint', 'clean', 'uglify', 'cssmin']);
+
+    grunt.registerTask('publish-test', ['build', 'sftp:test']);
+    grunt.registerTask('publish-product', ['build', 'sftp:product']);
 };
