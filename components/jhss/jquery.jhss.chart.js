@@ -973,7 +973,7 @@
         BaseChart.call(this, containerNode);
         option = option || {};
 
-        var colors = ['#732928', '#FFBAB8', '#FFA6A4', '#E14949', '#F96360'];
+        var colors = option.colors || ['#732928', '#FFBAB8', '#FFA6A4', '#E14949', '#F96360'];
         //['#2B6299', '#81D4F9', '#7FD5F9', '#2C6297', '#00A4F8'],
         //['#8E4D17', '#FFD8B7', '#FFC08E', '#D27327', '#FF8E32']
 
@@ -1007,14 +1007,14 @@
         scales.append('line')
             .attr('x1', 0)
             .attr('y1', function (d) {
-                return d % 10 === 0 ? 0 : 2;
+                return d % 10 === 0 ? 0 : 0;
             })
             .attr('x2', 0)
             .attr('y2', function (d) {
-                return d % 10 === 0 ? 16 : 14;
+                return d % 10 === 0 ? 16 : 16;
             })
             .attr('stroke-width', function (d) {
-                return d % 10 === 0 ? 3 : 1;
+                return d % 10 === 0 ? 2 : 1;
             })
             .attr('stroke', function (d) {
                 return d % 10 === 0 ? colors[0] : colors[1];
@@ -1050,14 +1050,22 @@
             .attr('r', edge * 0.13)
             .attr('fill', colors[4]);
 
-        pointContainer.append('text')
+        var pointerText = pointContainer.append('text')
             .attr('x', 0)
             .attr('y', height / 2)
             .attr('fill', '#fff')
             .attr('text-anchor', 'middle')
             .attr('dominant-baseline', 'middle')
-            .attr('font-size', edge * 0.08)
+            .attr('font-size', edge * 0.07)
             .text('0%');
+
+        svg.append('text')
+            .attr('x', width / 2)
+            .attr('y', height / 2 + edge * 0.3)
+            .attr('font-size', edge * 0.08)
+            .attr('text-anchor', 'middle')
+            .attr('fill', colors[2])
+            .text('总成功率');
 
         this.animate = function (dataset) {
             var startTransform = pointer.attr('transform'),
@@ -1066,6 +1074,16 @@
                 .duration(JHSSChart.duration)
                 .attrTween("transform", function () {
                     return d3.interpolateString(startTransform, endTransform);
+                });
+
+            pointerText.transition()
+                .duration(JHSSChart.duration)
+                .tween('text', function () {
+                    var i = d3.interpolateNumber(0, dataset);
+                    return function (t) {
+                        var c = i(t);
+                        this.textContent = c.toFixed(2) + '%';
+                    };
                 });
 
         };

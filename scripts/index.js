@@ -48,6 +48,9 @@ function initPages() {
     pages.push(getProfitLossTotalPage());
     pages.push(getProfitLossAvgPage());
     pages.push(getPositionStatPage());
+    pages.push(getSuccessRatePage());
+    pages.push(getStockSelectionPage());
+    pages.push(getAboutPage());
 
     return pages;
 }
@@ -372,6 +375,67 @@ function getPositionStatPage() {
         $('#emptydays').text(result.empty);
         $('#position_stat_remark').text(result.remark);
     }
+
+    return page;
+}
+
+function getSuccessRatePage() {
+    var chart = [];
+    var page = $.page({
+        fragment: 'fragment/success_rate.html',
+        container: '#page7',
+        init: init,
+        analysis: $.analysis({
+            type: 'success_rate',
+            callback: load
+        })
+    });
+
+    function init() {
+        chart[0] = new $.chart.DashChart('.suc_total', {colors: ['#732928', '#FFBAB8', '#FFA6A4', '#E14949', '#F96360']});
+        chart[1] = new $.chart.DashChart('.suc_t4', {colors: ['#2B6299', '#81D4F9', '#7FD5F9', '#2C6297', '#00A4F8']});
+        chart[2] = new $.chart.DashChart('.suc_t1', {colors: ['#8E4D17', '#FFD8B7', '#FFC08E', '#D27327', '#FF8E32']});
+    }
+
+    function load(data) {
+        var result = data.result;
+        chart[0].setData(result.suc * 100);
+        chart[1].setData(result.t4 * 100);
+        chart[2].setData(result.t1 * 100);
+        $('#success_rate_remark').text(result.remark);
+    }
+
+    return page;
+}
+
+function getStockSelectionPage() {
+    var page = $.page({
+        fragment: 'fragment/stock_selection.html',
+        container: '#page8',
+        analysis: $.analysis({
+            type: 'stock_selection',
+            callback: load
+        })
+    });
+
+    function load(data) {
+        var result = data.result;
+        $('#avg_profit').text(result.avgProfit);
+        $('#avg_hold').text(result.avgDays);
+        $('#trade_rate').text(result.tradingFrequency);
+        $('#trade_time').text(result.tradingNum);
+        $('#trade_num').text(result.totalStock);
+        $('#stockskilled').text(result.remark.split('、')[0]);
+    }
+
+    return page;
+}
+
+function getAboutPage() {
+    var page = $.page({
+        fragment: 'fragment/about.html',
+        container: '#page9'
+    });
 
     return page;
 }

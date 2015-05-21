@@ -1,0 +1,151 @@
+div.container {
+    height: 77%;
+}
+
+div.flag {
+    width: 65%;
+    height: 0;
+    font-size: 1em;
+    line-height: 0;
+    padding-left: 4.1666666666667%;
+    margin-left: 10%;
+    border-right: 0.9em solid transparent;
+    border-top: 0.9em solid;
+    border-bottom: 0.9em solid;
+    margin-top: 3%
+}
+
+div.rabion {
+    width: 65%;
+    height: 0;
+    font-size: 1em;
+    line-height: 0;
+    margin-left: 10%;
+    border-left: 1em solid transparent;
+    border-right: 1em solid transparent;
+    border-top: 1em solid #FFC636;
+    border-bottom: 1em solid #FFC636;
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+}
+
+div.value {
+    margin-top: 6px;
+    width: 80%;
+    height: 1.5em;
+    margin-left: 10%;
+    position: relative;
+}
+
+div.mark {
+    width: 3px;
+    height: 100%;
+    float: left;
+    margin-right: 3.1944444444444%;
+}
+
+div.value span {
+    left: 15px;
+    font-size: 1em;
+    float: left;
+    position: absolute;
+    bottom: 0;
+}
+
+div.value span b {
+    font-size: 1.2em;
+}
+
+div#flag_avg_profit {
+    border-top-color: #FFEEDF;
+    border-bottom-color: #FFEEDF;
+    color: #FF902C;
+}
+
+div#value_avg_profit {
+    color: #FF902C;
+}
+
+div#mark_avg_profit {
+    background-color: #FF902B;
+}
+
+div#flag_avg_hold {
+    border-top-color: #FFE3FE;
+    border-bottom-color: #FFE3FE;
+    color: #EB6DE9;
+}
+
+div#value_avg_hold {
+    color: #EB6DE9;
+}
+
+div#mark_avg_hold {
+    background-color: #E75DE8;
+}
+
+div#flag_trade_rate {
+    border-top-color: #DEF4FE;
+    border-bottom-color: #DEF4FE;
+    color: #0099DC;
+}
+
+div#value_trade_rate {
+    color: #0099DC;
+}
+
+div#mark_trade_rate {
+    background-color: #0099DB;
+}
+
+div#flag_trade_time {
+    border-top-color: #FFDBC3;
+    border-bottom-color: #FFDBC3;
+    color: #FF6C26;
+}
+
+div#value_trade_time {
+    color: #FF6C26;
+}
+
+div#mark_trade_time {
+    background-color: #FF6D26;
+}
+
+div#flag_trade_num {
+    border-top-color: #FFF2D9;
+    border-bottom-color: #FFF2D9;
+    color: #FFAE31;
+}
+
+div#value_trade_num {
+    color: #FFAE31;
+}
+
+div#mark_trade_num {
+    background-color: #FFAD31;
+}
+
+@media all and (max-width: 320px) {
+    div.flag {
+        width: 65%;
+        height: 0;
+        font-size: 0.9em;
+        line-height: 0;
+        padding-left: 4.1666666666667%;
+        margin-left: 10%;
+        border-right: 0.8em solid transparent;
+        border-top: 0.8em solid;
+        border-bottom: 0.8em solid;
+        margin-top: 3%
+    }
+
+    div.value {
+        height: 1.3em;
+    }
+
+    div.value span b {
+        font-size: 1em;
+    }
+}

@@ -70,6 +70,12 @@
             case 'position_stat':
                 path = '/position_stat?userid={userid}&matchid={matchid}';
                 break;
+            case 'success_rate':
+                path = '/success_rate?userid={userid}&matchid={matchid}';
+                break;
+            case 'stock_selection':
+                path = '/stock_selection?userid={userid}&matchid={matchid}';
+                break;
             default:
                 throw new Error('no such type: ' + type);
         }

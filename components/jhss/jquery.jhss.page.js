@@ -12,8 +12,10 @@
      * @constructor
      */
     function Page(option) {
+        option = option || {};
         this.fragment = option.fragment;
-        this.analysis = Array.isArray(option.analysis) ? option.analysis : [option.analysis];
+        var analysis = option.analysis || [];
+        this.analysis = Array.isArray(analysis) ? analysis : [analysis];
         this.init = option.init;
         this.container = option.container;
         this.loadFlag = false;
@@ -32,6 +34,7 @@
             for (i = 0; i < self.analysis.length; i++) {
                 self.analysis[i].request();
             }
+            self.loadFlag = true;
         });
     };
 
