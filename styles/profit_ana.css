@@ -82,7 +82,8 @@ div.profitana div:first-child {
 }
 
 div.chart {
-    width: 100%;
+    margin-left: 3.7%;
+    width: 92%;
     height: 45.3125%;
     padding: 11% 0 2% 0;
     box-sizing: border-box;

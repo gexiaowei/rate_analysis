@@ -15,7 +15,7 @@ var publishFiles = [
     'components/dist/*.min.js',
     'fragment/**',
     'scripts/dist/**',
-    'styles/dist/**',
+    'styles/analysis.css',
     'index.html'
 ];
 

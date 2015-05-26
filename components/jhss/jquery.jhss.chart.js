@@ -498,11 +498,17 @@
      */
     function ProfitLineChart(containerNode, option) {
         BaseChart.call(this, containerNode);
-        var svg = this.svg;
 
-        if (!option) {
-            option = {};
-        }
+        option = option || {};
+
+        var svg = this.svg;
+        var width = this.size.width,
+            height = this.size.height;
+
+        var paddingTop = height * 0.2,
+            paddingBottom = height * 0.3,
+            paddingLeft = height * 0.1,
+            paddingRight = height * 0.1;
 
         var color = option.color || ['#FF9641', 'rgba(253,137,24 ,0.4)', 'rgba(255,173,0,0.3)', 'rgba(207,144,0,0.2)'];
 
@@ -510,13 +516,13 @@
 
         //缩放比例
         var xScale = d3.scale.linear()
-            .range([0, this.size.width]);
+            .range([0, width]);
 
         var yAssetScale = d3.scale.linear()
-            .range([this.size.height, 0]);
+            .range([height - paddingBottom, paddingTop]);
 
         var yIndexScale = d3.scale.linear()
-            .range([this.size.height, 0]);
+            .range([height - paddingBottom, paddingTop]);
 
         //收益曲线参数
         var lineAsset = d3.svg.line()
@@ -557,6 +563,10 @@
             .y1(function (d) {
                 return yIndexScale(d.index);
             });
+
+        var yAssetAxis = d3.svg.axis();
+        var yIndexxAxis = d3.svg.axis();
+
 
         var doAnimate = function (obj) {
             obj.path.transition()
@@ -605,10 +615,51 @@
             cal: areaIndex
         });
 
+        // 坐标轴
+        var xAxis = d3.svg.axis()
+            .scale(xScale)
+            .orient('bottom');
+
+        var b = svg.append('g');
+
+        b.call(xAxis);
+        b.select('path').style('fill', '#fff');
+
+        b.attr('transform', $.format('translate(0,{0})', height - paddingBottom));
+
         this.animate = function (dataset) {
+
+
             data = dataset.reverse();
 
+            if (data.length === 1) {
+                data.push(data[0]);
+            }
+            var tickNum = data.length > 2 ? 3 : 2;
+            var tickValue = [0, Math.round(data.length / 2), data.length - 1];
+            if (data.length < 3) {
+                tickValue = [0, data.length - 1];
+            }
+
             xScale.domain([0, data.length - 1]);
+
+            xAxis
+                .tickValues(tickValue)
+                .tickFormat(function (d) {
+                    return data[d].date;
+                });
+
+            b.call(xAxis);
+
+            b.selectAll('text').attr('text-anchor', function (d, i) {
+                if (i === 0) {
+                    return 'start';
+                } else if (i === tickNum - 1) {
+                    return 'end';
+                } else {
+                    return 'middle';
+                }
+            }).attr('style', '');
 
             yAssetScale.domain(d3.extent(data, function (d) {
                 return d.asset;
@@ -952,10 +1003,8 @@
             {x: cx + Math.sin(θ) * r, y: cy + Math.cos(θ) * r}
         ];
 
-        console.log(points);
         containers.append('path')
             .attr('d', triangle(points));
-
     }
 
     ProfitAvgChart.prototype.setData = function (dataset) {
