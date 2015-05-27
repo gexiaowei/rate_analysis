@@ -17,9 +17,11 @@
   "dependencies": {
     "grunt-contrib-jshint": "latest",
     "grunt-contrib-clean": "latest",
+    "grunt-contrib-copy": "latest",
     "grunt-contrib-watch": "latest",
     "grunt-contrib-cssmin": "latest",
     "grunt-contrib-uglify": "latest",
+    "jpegtran-bin": "0.2.0",
     "grunt-contrib-imagemin": "latest",
     "grunt-ssh": "latest"
   }

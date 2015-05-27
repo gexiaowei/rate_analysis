@@ -1,9 +1,5 @@
 # Created by .ignore support plugin (hsz.mobi)
-backup
 bower_components
 node_modules
-demo
-json
 secret.json
-**/dist
-styles/analysis.css
+dist

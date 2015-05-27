@@ -13,6 +13,7 @@
   "dependencies": {
     "idangerous-swiper": "latest",
     "d3": "latest",
-    "jquery": "1.11.x"
+    "jquery": "1.11.x",
+    "jhss.wechat": "latest"
   }
 }
