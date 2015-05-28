@@ -695,14 +695,14 @@
      * @param {Number} num 大数据
      * @returns {String}
      */
-    function formatNum(num) {
-        num = num.toFixed(2);
+    function formatNum(num, simple) {
+        simple = !!simple;
         var unit = '',
             absnum = Math.abs(num);
         if (absnum < 10000) {
-            num = num.toFixed(0);
+            num = (num / 1).toFixed(2);
         } else if (absnum >= 10000 && absnum < 100000000) {
-            num = (num / 10000).toFixed(1);
+            num = (num / 10000).toFixed(2);
             unit = '万';
         } else if (absnum >= 100000000 && absnum < 100000000000) {
             num = (num / 100000000).toFixed(2);
@@ -711,7 +711,7 @@
             num = (num / 100000000000).toFixed(2);
             unit = '千亿';
         }
-        return {
+        return simple ? num + unit : {
             val: num,
             unit: unit
         };

@@ -505,10 +505,10 @@
         var width = this.size.width,
             height = this.size.height;
 
-        var paddingTop = height * 0.2,
+        var paddingTop = height * 0.15,
             paddingBottom = height * 0.3,
-            paddingLeft = height * 0.1,
-            paddingRight = height * 0.1;
+            paddingLeft = width * 0.05,
+            paddingRight = width * 0.05;
 
         var color = option.color || ['#FF9641', 'rgba(253,137,24 ,0.4)', 'rgba(255,173,0,0.3)', 'rgba(207,144,0,0.2)'];
 
@@ -516,7 +516,7 @@
 
         //缩放比例
         var xScale = d3.scale.linear()
-            .range([0, width]);
+            .range([paddingLeft, width - paddingRight]);
 
         var yAssetScale = d3.scale.linear()
             .range([height - paddingBottom, paddingTop]);
@@ -537,9 +537,7 @@
             .x(function (d, i) {
                 return xScale(i);
             })
-            .y0(function () {
-                return yAssetScale(0);
-            })
+            .y0(height - paddingBottom)
             .y1(function (d) {
                 return yAssetScale(d.asset);
             });
@@ -557,16 +555,10 @@
             .x(function (d, i) {
                 return xScale(i);
             })
-            .y0(function () {
-                return yAssetScale(0);
-            })
+            .y0(height - paddingBottom)
             .y1(function (d) {
                 return yIndexScale(d.index);
             });
-
-        var yAssetAxis = d3.svg.axis();
-        var yIndexxAxis = d3.svg.axis();
-
 
         var doAnimate = function (obj) {
             obj.path.transition()
@@ -615,20 +607,35 @@
             cal: areaIndex
         });
 
-        // 坐标轴
+        // x轴
         var xAxis = d3.svg.axis()
             .scale(xScale)
+            .outerTickSize(0)
             .orient('bottom');
 
-        var b = svg.append('g');
+        var xAxisGroup = svg.append('g');
+        xAxisGroup.call(xAxis);
+        xAxisGroup.attr('transform', $.format('translate(0,{0})', height - paddingBottom));
 
-        b.call(xAxis);
-        b.select('path').style('fill', '#fff');
+        // 左y轴
+        var yAssetAxis = d3.svg.axis()
+            .scale(yAssetScale)
+            .outerTickSize(0)
+            .orient('right');
+        var yAssetAxisGroup = svg.append('g');
+        yAssetAxisGroup.call(yAssetAxis);
+        yAssetAxisGroup.attr('transform', $.format('translate({0},0)', 0));
 
-        b.attr('transform', $.format('translate(0,{0})', height - paddingBottom));
+        var yIndexAxis = d3.svg.axis()
+            .scale(yIndexScale)
+            .outerTickSize(0)
+            .orient('left');
+
+        var yIndexAxisGroup = svg.append('g');
+        yIndexAxisGroup.call(yIndexAxis);
+        yIndexAxisGroup.attr('transform', $.format('translate({0},0)', width));
 
         this.animate = function (dataset) {
-
 
             data = dataset.reverse();
 
@@ -642,32 +649,77 @@
             }
 
             xScale.domain([0, data.length - 1]);
-
+            //x轴
             xAxis
                 .tickValues(tickValue)
                 .tickFormat(function (d) {
                     return data[d].date;
                 });
+            xAxisGroup.call(xAxis);
+            xAxisGroup.selectAll('text')
+                .attr('text-anchor', function (d, i) {
+                    if (i === 0) {
+                        return 'start';
+                    } else if (i === tickNum - 1) {
+                        return 'end';
+                    } else {
+                        return 'middle';
+                    }
+                })
+                .attr('fill', '#FF8931')
+                .attr('font-size', 13)
+                .attr('style', '');
+            //x轴结束
 
-            b.call(xAxis);
-
-            b.selectAll('text').attr('text-anchor', function (d, i) {
-                if (i === 0) {
-                    return 'start';
-                } else if (i === tickNum - 1) {
-                    return 'end';
-                } else {
-                    return 'middle';
-                }
-            }).attr('style', '');
-
-            yAssetScale.domain(d3.extent(data, function (d) {
+            var assetExtent = d3.extent(data, function (d) {
                 return d.asset;
-            }));
+            });
+            yAssetScale.domain(assetExtent);
 
-            yIndexScale.domain(d3.extent(data, function (d) {
+            //左y轴
+            var assetScaleData = d3.scale.ordinal()
+                .domain([0, 1, 2])
+                .rangeRoundBands(assetExtent);
+            assetScaleData = assetScaleData.range();
+            assetScaleData.shift();
+            assetScaleData.push(assetExtent[1]);
+
+            yAssetAxis
+                .tickValues(assetScaleData)
+                .tickFormat(function (d) {
+                    return $.formatNum(d, true);
+                });
+            yAssetAxisGroup.call(yAssetAxis);
+            yAssetAxisGroup.selectAll('text')
+                .attr('fill', '#FF8931')
+                .attr('font-size', 12);
+            //左y轴结束
+
+            var indexExtent = d3.extent(data, function (d) {
                 return d.index;
-            }));
+            });
+            yIndexScale.domain(indexExtent);
+
+            //右y轴
+            var indexScaleData = d3.scale.ordinal()
+                .domain([0, 1, 2])
+                .rangeRoundBands(indexExtent);
+            indexScaleData = indexScaleData.range();
+            indexScaleData.shift();
+            indexScaleData.push(indexExtent[1]);
+
+            console.log(indexScaleData);
+
+            yIndexAxis
+                .tickValues(indexScaleData)
+                .tickFormat(function (d) {
+                    return $.formatNum(d, true);
+                });
+            yIndexAxisGroup.call(yIndexAxis);
+            yIndexAxisGroup.selectAll('text')
+                .attr('fill', '#FF8931')
+                .attr('font-size', 12);
+            //右y轴结束
 
             animateObjs.forEach(function (d) {
                 doAnimate(d);

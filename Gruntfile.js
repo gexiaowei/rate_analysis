@@ -39,6 +39,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: [
+                            'test/**',
                             'fragment/**',
                             'index.html'
                         ],
@@ -56,8 +57,7 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: 'scripts/',
                     src: ['*.js'],
-                    dest: 'dist/scripts/',
-                    ext: '.min.js'
+                    dest: 'dist/scripts/'
                 }]
             },
             plugin: {
@@ -89,11 +89,12 @@ module.exports = function (grunt) {
             }
         },
         watch: {
-            build: {
-                files: ['components/**', '!components/dist/**', 'styles/*.css', '!styles/analysis.css'],
-                tasks: ['build']
+            plugin: {
+                files: ['components/**'],
+                tasks: ['uglify:plugin']
             }
         },
+        secret: grunt.file.readJSON('secret.json'),
         sftp: {
             product: {
                 files: {
