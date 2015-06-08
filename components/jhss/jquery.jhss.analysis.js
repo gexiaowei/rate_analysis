@@ -79,8 +79,6 @@
             default:
                 throw new Error('no such type: ' + type);
         }
-        console.log('请求路径', path);
-        console.log('请求参数', params);
         $.httpRequest(urlRate + path, params, {
             success: function (data) {
                 callback(data);

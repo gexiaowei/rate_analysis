@@ -708,8 +708,6 @@
             indexScaleData.shift();
             indexScaleData.push(indexExtent[1]);
 
-            console.log(indexScaleData);
-
             yIndexAxis
                 .tickValues(indexScaleData)
                 .tickFormat(function (d) {

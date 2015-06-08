@@ -30,7 +30,6 @@ $(function () {
 
 function loadPage(swiper) {
     var index = swiper.activeIndex;
-    console.log('加载第' + index + '页');
     var page = pages[index];
     if (!page.isLoad()) {
         page.request();
@@ -264,7 +263,6 @@ function getAnnualProfitPage() {
 
     function load(data) {
         var result = data.result;
-        console.log(result);
         beatChart.setData(result.defeatRate * 100);
         profitChart.setData([
             result.annualProfit,
@@ -303,7 +301,6 @@ function getProfitLossTotalPage() {
 
     function load(data) {
         var result = data.result;
-        console.log(result);
         pieChart.setData([
             result.flatDays,
             result.lossDays,
@@ -332,8 +329,6 @@ function getProfitLossAvgPage() {
 
     function load(data) {
         var result = data.result;
-        console.log(result);
-
         $('#loss_avg_remark').text(result.remark);
     }
 
