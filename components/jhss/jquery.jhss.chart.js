@@ -560,7 +560,7 @@
                 return yIndexScale(d.index);
             });
 
-        var doAnimate = function (obj) {
+        var doAnimate = function (obj, callend) {
             obj.path.transition()
                 .duration(JHSSChart.duration)
                 .attrTween('d', function () {
@@ -568,8 +568,42 @@
                     return function (t) {
                         return obj.cal(data.slice(0, i(t)));
                     };
+                }).each('end', function () {
+                    if (callend) {
+                        var max, min, temp;
+                        data.forEach(function (d, i) {
+                            temp = {
+                                index: i,
+                                val: d.asset
+                            };
+                            max = getMax(max, temp);
+                            min = getMin(min, temp);
+                        });
+                        //console.log(max, min);
+                        pointHigh
+                            .attr('class', 'show')
+                            .attr('transform', $.format('translate({0},{1})', xScale(max.index), yAssetScale(max.val)));
+
+                        pointLow
+                            .attr('class', 'show')
+                            .attr('transform', $.format('translate({0},{1})', xScale(min.index), yAssetScale(min.val)));
+                    }
                 });
         };
+
+        function getMax(obj1, obj2) {
+            if (!obj1) {
+                return obj2;
+            }
+            return obj1.val >= obj2.val ? obj1 : obj2
+        }
+
+        function getMin(obj1, obj2) {
+            if (!obj1) {
+                return obj2;
+            }
+            return obj1.val <= obj2.val ? obj1 : obj2
+        }
 
         var animateObjs = [];
 
@@ -635,7 +669,55 @@
         yIndexAxisGroup.call(yIndexAxis);
         yIndexAxisGroup.attr('transform', $.format('translate({0},0)', width));
 
+        var radius = 6.25;
+        var pointHigh = svg.append('g')
+            .attr('class', 'hide');
+        pointHigh.append('circle')
+            .attr('fill', '#F0081A')
+            .attr('r', radius);
+
+        var circleHigh = pointHigh.append('circle')
+            .attr('fill', 'transparent')
+            .attr('stroke-width', 1)
+            .attr('stroke', '#F0081A')
+            .attr('r', radius);
+
+        pointAnimate(circleHigh);
+
+        var pointLow = svg.append('g')
+            .attr('class', 'hide');
+        pointLow.append('circle')
+            .attr('fill', '#00951F')
+            .attr('r', radius);
+
+        var circleLow = pointLow.append('circle')
+            .attr('fill', 'transparent')
+            .attr('stroke-width', 1)
+            .attr('stroke', '#00951F')
+            .attr('r', radius);
+
+        pointAnimate(circleLow);
+
+
+        function pointAnimate(point) {
+            var currentRadius = point.attr('r');
+            var direction = currentRadius > radius ? -1 : 1;
+            point.transition()
+                .duration(JHSSChart.duration * 2)
+                .attr('r', function () {
+                    return parseFloat(currentRadius) + direction * 5;
+                })
+                .each('end', function () {
+                    pointAnimate(point);
+                });
+        }
+
         this.animate = function (dataset) {
+
+            pointHigh
+                .attr('class', 'hide');
+            pointLow
+                .attr('class', 'hide');
 
             data = dataset.reverse();
 
@@ -719,8 +801,8 @@
                 .attr('font-size', 12);
             //右y轴结束
 
-            animateObjs.forEach(function (d) {
-                doAnimate(d);
+            animateObjs.forEach(function (d, i) {
+                doAnimate(d, i === 0);
             });
         };
     }

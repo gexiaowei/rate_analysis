@@ -7,7 +7,7 @@ body {
     text-align: center;
     font-size-adjust: none;
     -webkit-text-size-adjust: none;
-    font-family: Microsoft YaHei, simhei, SimSun, sans-serif
+    font-family: Helvetica Microsoft YaHei, simhei, SimSun, sans-serif
 }
 
 html, body {
@@ -113,6 +113,14 @@ div.next {
     text-align: center;
     height: 25px;
     color: #00A7FB;
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
 }
 
 .animatetip {
