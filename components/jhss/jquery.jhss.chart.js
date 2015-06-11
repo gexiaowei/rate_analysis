@@ -641,6 +641,8 @@
             cal: areaIndex
         });
 
+        //TODO 需要增加图例
+
         // x轴
         var xAxis = d3.svg.axis()
             .scale(xScale)
